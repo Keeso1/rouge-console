@@ -1,0 +1,14 @@
+/home/isac/Documents/softwdev/rouge-console/bin/Debug/net10.0/rouge-console
+/home/isac/Documents/softwdev/rouge-console/bin/Debug/net10.0/rouge-console.deps.json
+/home/isac/Documents/softwdev/rouge-console/bin/Debug/net10.0/rouge-console.runtimeconfig.json
+/home/isac/Documents/softwdev/rouge-console/bin/Debug/net10.0/rouge-console.dll
+/home/isac/Documents/softwdev/rouge-console/bin/Debug/net10.0/rouge-console.pdb
+/home/isac/Documents/softwdev/rouge-console/obj/Debug/net10.0/rouge-console.GeneratedMSBuildEditorConfig.editorconfig
+/home/isac/Documents/softwdev/rouge-console/obj/Debug/net10.0/rouge-console.AssemblyInfoInputs.cache
+/home/isac/Documents/softwdev/rouge-console/obj/Debug/net10.0/rouge-console.AssemblyInfo.cs
+/home/isac/Documents/softwdev/rouge-console/obj/Debug/net10.0/rouge-console.csproj.CoreCompileInputs.cache
+/home/isac/Documents/softwdev/rouge-console/obj/Debug/net10.0/rouge-console.dll
+/home/isac/Documents/softwdev/rouge-console/obj/Debug/net10.0/refint/rouge-console.dll
+/home/isac/Documents/softwdev/rouge-console/obj/Debug/net10.0/rouge-console.pdb
+/home/isac/Documents/softwdev/rouge-console/obj/Debug/net10.0/rouge-console.genruntimeconfig.cache
+/home/isac/Documents/softwdev/rouge-console/obj/Debug/net10.0/ref/rouge-console.dll
