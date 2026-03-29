@@ -21,7 +21,13 @@ public class InputHandler
         {
             return null;
         }
-        return Console.ReadKey(false);
+        return Console.ReadKey(true);
+    }
+
+    public InputAction WaitForInput()
+    {
+        var key = Console.ReadKey(intercept: true);
+        return Map(key);
     }
 
     public InputAction Poll()

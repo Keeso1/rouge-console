@@ -6,7 +6,7 @@
         var input = new InputHandler();
         while (true)
         {
-            var inputKey = input.Poll();
+            var inputKey = input.WaitForInput();
             Console.WriteLine(inputKey);
             Thread.Sleep(16);
         }
