@@ -8,4 +8,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Sharpie-Curses" Version="1.7.0" />
+    <PackageReference Include="Sharpie-Libs-NCurses" Version="2025.10.3" />
+  </ItemGroup>
+
 </Project>
