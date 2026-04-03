@@ -13,7 +13,7 @@ public class Tile
 
 	public static Tile Floor => new() { Glyph = Assets.Ground, Walkable = true };
 	public static Tile Wall => new() { Glyph = Assets.Wall };
-	public static Tile Enemy => new() { Glyph = Assets.Enemy };
+	public static Tile Goblin => new() { Glyph = Assets.Enemy, Entity = new Goblin(100, 100) };
 	public static Tile Player => new() { Glyph = Assets.Player };
 }
 
