@@ -1,10 +1,12 @@
+using System.Text;
+
 namespace RogueConsole.Assets;
 
 public static class Assets
 {
-    public const char Player = '@';
-    public const char Enemy = 'X';
-    public const char Ground = '.';
-    public const char Bush = 'B';
-    public const char Wall = '¤';
+    public static readonly Rune Player = new('@');
+    public static readonly Rune Enemy = new('X');
+    public static readonly Rune Ground = new('.');
+    public static readonly Rune Bush = new('B');
+    public static readonly Rune Wall = new('#');
 }
