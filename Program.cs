@@ -1,50 +1,59 @@
-﻿using RogueConsole.World;
-using RogueConsole.Core;
-using System.Drawing;
+﻿using System.Drawing;
 using Sharpie;
+using Sharpie.Abstractions;
 using Sharpie.Backend;
 
-internal class Program
-{
-    private static void Main(string[] args)
+var terminal = new Terminal(
+    CursesBackend.Load(),
+    new TerminalOptions(UseColors: true, CaretMode: CaretMode.Invisible, UseMouse: false)
+);
+
+terminal.Repeat(
+    t =>
     {
-        var backend = CursesBackend.Load();
-        using var terminal = new Terminal(
-            backend,
-            new TerminalOptions(UseMouse: false, SuppressControlKeys: false)
-        );
+        t.Screen.Refresh();
+        return Task.CompletedTask;
+    },
+    100
+);
 
-        terminal.Screen.Refresh();
+var prevPosition = new Point(terminal.Screen.Size.Width / 2, terminal.Screen.Size.Height / 2);
+var position = new Point(terminal.Screen.Size.Width / 2, terminal.Screen.Size.Height / 2);
 
-        Canvas canvas = new Canvas(terminal.Screen.Size);
-        TileMap map = new(terminal.Screen.Size.Width, terminal.Screen.Size.Height, canvas);
-        GameState state = new();
-        InputHandler input = new();
-
-        foreach (var @event in terminal.Events.Listen(terminal.Screen))
+terminal.Run(
+    (Term, Tevent) =>
+    {
+        switch (Tevent)
         {
-
-            state.Update();
-            // terminal.Screen.WriteText($"{@event}\n");
-            RenderScreen();
-            if (@event is KeyEvent { Char.Value: 'c' })
-            {
+            case KeyEvent { Char.Value: 'q' }:
+                Environment.Exit(0);
                 break;
-            }
-
-            if (@event is StartEvent)
-            {
-            }
+            case KeyEvent { Char.Value: 'h' }:
+                position = prevPosition with { X = prevPosition.X - 1 };
+                Term.Screen.DrawCell(prevPosition, new System.Text.Rune(' '), new Style());
+                Term.Screen.DrawCell(position, new System.Text.Rune('h'), new Style());
+                prevPosition = position;
+                break;
+            case KeyEvent { Char.Value: 'j' }:
+                position = prevPosition with { Y = prevPosition.Y + 1 };
+                Term.Screen.DrawCell(prevPosition, new System.Text.Rune(' '), new Style());
+                Term.Screen.DrawCell(position, new System.Text.Rune('h'), new Style());
+                prevPosition = position;
+                break;
+            case KeyEvent { Char.Value: 'k' }:
+                position = prevPosition with { Y = prevPosition.Y - 1 };
+                Term.Screen.DrawCell(prevPosition, new System.Text.Rune(' '), new Style());
+                Term.Screen.DrawCell(position, new System.Text.Rune('h'), new Style());
+                prevPosition = position;
+                break;
+            case KeyEvent { Char.Value: 'l' }:
+                position = prevPosition with { X = prevPosition.X + 1 };
+                Term.Screen.DrawCell(prevPosition, new System.Text.Rune(' '), new Style());
+                Term.Screen.DrawCell(position, new System.Text.Rune('h'), new Style());
+                prevPosition = position;
+                break;
         }
-
-        void RenderScreen()
-        {
-            map.Render();
-            canvas.DrawOnto(terminal.Screen, new Rectangle(new Point(0, 0), canvas.Size), new Point(0, 0));
-            terminal.Screen.DrawBorder();
-            terminal.Screen.Refresh();
-        }
+        ;
+        return Task.FromResult(true);
     }
-
-
-}
+);
