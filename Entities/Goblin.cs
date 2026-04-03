@@ -8,7 +8,7 @@ public class Goblin : Entity
 	private int _tickCount = 0;
 	private (int, int) _playerPos;
 
-	public Goblin(TileMap map, int health, int maxHealth) : base(map, health, maxHealth, EntityType.Enemy)
+	public Goblin(int health, int maxHealth) : base(health, maxHealth, EntityType.Enemy)
 	{
 		GameState.OnTick += Update;
 		GameState.CurrentState += CheckState;
@@ -24,7 +24,7 @@ public class Goblin : Entity
 	{
 		if (_tickCount % 2 == 0)
 		{
-			_playerPos = _map.GetPlayer() ?? (0, 0);
+			_playerPos = TileMap.GetPlayer() ?? (0, 0);
 
 		}
 	}

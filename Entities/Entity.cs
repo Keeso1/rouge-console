@@ -1,7 +1,6 @@
 namespace RogueConsole.Entities;
 
 using RogueConsole.Core;
-using RogueConsole.World;
 
 public abstract class Entity
 {
@@ -9,13 +8,11 @@ public abstract class Entity
     public int Health { get; set; }
     public int MaxHealth { get; set; }
     public bool IsDead => Health <= 0;
-    protected TileMap _map;
 
-    protected Entity(TileMap map, int health, int maxhealth, EntityType type)
+    protected Entity(int health, int maxhealth, EntityType type)
     {
         Health = health;
         MaxHealth = maxhealth;
-        _map = map;
         Type = type;
     }
 
