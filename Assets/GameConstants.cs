@@ -9,4 +9,5 @@ public static class Assets
     public static readonly Rune Ground = new('.');
     public static readonly Rune Bush = new('B');
     public static readonly Rune Wall = new('#');
+    public static readonly Rune Space = new(' ');
 }
