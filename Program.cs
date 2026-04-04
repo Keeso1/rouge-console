@@ -17,12 +17,12 @@ using StreamWriter logFileWriter = new StreamWriter(logFilePath, append: true);
 ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
 {
     //Add console output
-    builder.AddSimpleConsole(options =>
-    {
-        options.IncludeScopes = true;
-        options.SingleLine = true;
-        options.TimestampFormat = "HH:mm:ss ";
-    });
+    // builder.AddSimpleConsole(options =>
+    // {
+    //     options.IncludeScopes = true;
+    //     options.SingleLine = true;
+    //     options.TimestampFormat = "HH:mm:ss ";
+    // });
 
     //Add a custom log provider to write logs to text files
     builder.AddProvider(new CustomFileLoggerProvider(logFileWriter));
