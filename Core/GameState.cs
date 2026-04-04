@@ -1,10 +1,11 @@
 using System.Drawing;
+using Microsoft.Extensions.Logging;
 using Sharpie;
 using Sharpie.Abstractions;
 
 namespace RogueConsole.Core;
 
-public sealed class GameState(Style playerBody)
+public sealed class GameState(ILogger logger, Style playerBody)
 {
     public static event EventHandler<GamePhase> CurrentState;
     public static event Action? OnTick;
