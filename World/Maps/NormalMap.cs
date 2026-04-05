@@ -8,14 +8,14 @@ public class NormalMap(int width, int height, Canvas canvas) : TileMap(width, he
 	protected override void InitMap()
 	{
 		Fill();
+		Set(GetCanvasCoords.GetVerticalLine(0, 0, Canvas.Size.Height), Tile.Wall);
+		Set(GetCanvasCoords.GetVerticalLine(Canvas.Size.Width - 1, 0, Canvas.Size.Height), Tile.Wall);
+		Set(GetCanvasCoords.GetHorizontalLine(1, 0, Canvas.Size.Width), Tile.Wall);
+		Set(GetCanvasCoords.GetHorizontalLine(Canvas.Size.Height - 1, 0, Canvas.Size.Width), Tile.Wall);
 		var (g1, g2) = GetCanvasCoords.GetCanvasTopCenter(Canvas);
 		var (g3, g4) = GetCanvasCoords.GetCanvasBottomCenter(Canvas);
-		Set((g1, g2 - 1), Tile.Goblin);
-		Set((g3, g4 + 1), Tile.Goblin);
-		Set(GetCanvasCoords.GetLine(0, 0, Canvas.Size.Height), Tile.Wall);
-		Set(GetCanvasCoords.GetLine(Canvas.Size.Width - 1, 0, Canvas.Size.Height), Tile.Wall);
-		Set(GetCanvasCoords.GetLine(0, 0, Canvas.Size.Width), Tile.Wall);
-		Set(GetCanvasCoords.GetLine(Canvas.Size.Height - 1, 0, Canvas.Size.Width), Tile.Wall);
+		Set((g1, g2 + 2), Tile.Goblin);
+		Set((g3, g4 - 2), Tile.Goblin);
 	}
 
 }

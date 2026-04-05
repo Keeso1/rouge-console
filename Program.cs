@@ -3,6 +3,7 @@ using System.Text;
 using Microsoft.Extensions.Logging;
 using RogueConsole.Assets;
 using RogueConsole.Core;
+using RogueConsole.World.Maps;
 using Sharpie;
 using Sharpie.Abstractions;
 using Sharpie.Backend;
@@ -37,6 +38,8 @@ var terminal = new Terminal(
 );
 
 Canvas canvas = new(terminal.Screen.Size);
+var room = new NormalMap(canvas.Size.Width, canvas.Size.Height, canvas);
+room.Render();
 
 var game = new GameState(
     logger,
@@ -61,7 +64,7 @@ terminal.Repeat(
             new Point(0, 0)
         );
         t.Screen.Refresh();
-        t.Screen.DrawBorder();
+        // t.Screen.DrawBorder();
         return Task.CompletedTask;
     },
     50

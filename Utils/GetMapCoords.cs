@@ -12,11 +12,20 @@ public static class GetCanvasCoords
 	public static (int, int) GetCanvasBottomLeft(Canvas canvas) => (0, canvas.Size.Height - 1);
 	public static (int, int) GetCanvasBottomRight(Canvas canvas) => (canvas.Size.Width - 1, canvas.Size.Height - 1);
 
-	public static IEnumerable<(int, int)> GetLine(int setCoord, int from, int to)
+	public static IEnumerable<(int, int)> GetVerticalLine(int setCoord, int from, int to)
 	{
 		for (int y = from; y < to; y++)
 		{
 			yield return (setCoord, y);
+		}
+	}
+
+
+	public static IEnumerable<(int, int)> GetHorizontalLine(int setCoord, int from, int to)
+	{
+		for (int y = from; y < to; y++)
+		{
+			yield return (y, setCoord);
 		}
 	}
 }

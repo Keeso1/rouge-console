@@ -18,6 +18,7 @@ public class TileMap
 		Width = width;
 		Height = height;
 		Canvas = canvas;
+		Tiles = new Tile[Width, Height];
 		InitMap();
 
 		GameState.OnTick += Update;
