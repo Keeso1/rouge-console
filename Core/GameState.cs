@@ -22,41 +22,33 @@ public sealed class GameState(ILogger logger, Style playerBody)
         right,
     }
 
-    public bool InBounds(Point pos)
-    {
-        bool isInboundsX = pos.X > 0 && pos.X + 1 < Canvas.Size.Width;
-        bool isInboundsY = pos.Y > 0 && pos.Y + 1 < Canvas.Size.Height;
-        return isInboundsX && isInboundsY;
-    }
+    // public bool InBounds(Point pos)
+    // {
+    //     bool isInboundsX = pos.X > 0 && pos.X + 1 < Canvas.Size.Width;
+    //     bool isInboundsY = pos.Y > 0 && pos.Y + 1 < Canvas.Size.Height;
+    //     return isInboundsX && isInboundsY;
+    // }
 
     public void Update(Direction? direction)
     {
         Point position = direction switch
         {
-            Direction.down => InBounds(PrevPosition with { Y = PrevPosition.Y + 1 })
-                ? PrevPosition with
-                {
-                    Y = PrevPosition.Y + 1,
-                }
-                : PrevPosition,
-            Direction.up => InBounds(PrevPosition with { Y = PrevPosition.Y - 1 })
-                ? PrevPosition with
-                {
-                    Y = PrevPosition.Y - 1,
-                }
-                : PrevPosition,
-            Direction.left => InBounds(PrevPosition with { X = PrevPosition.X - 1 })
-                ? PrevPosition with
-                {
-                    X = PrevPosition.X - 1,
-                }
-                : PrevPosition,
-            Direction.right => InBounds(PrevPosition with { X = PrevPosition.X + 1 })
-                ? PrevPosition with
-                {
-                    X = PrevPosition.X + 1,
-                }
-                : PrevPosition,
+            Direction.down => PrevPosition with
+            {
+                Y = Math.Clamp(PrevPosition.Y + 1, 0, Canvas.Size.Height - 1),
+            },
+            Direction.up => PrevPosition with
+            {
+                Y = Math.Clamp(PrevPosition.Y - 1, 0, Canvas.Size.Height - 1),
+            },
+            Direction.left => PrevPosition with
+            {
+                X = Math.Clamp(PrevPosition.X - 1, 0, Canvas.Size.Width - 1),
+            },
+            Direction.right => PrevPosition with
+            {
+                X = Math.Clamp(PrevPosition.X + 1, 0, Canvas.Size.Width - 1),
+            },
             _ => PrevPosition,
         };
 

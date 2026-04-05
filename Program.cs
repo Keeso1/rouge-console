@@ -77,7 +77,6 @@ terminal.Run(
             case KeyEvent { Char.Value: 'h' }:
                 game.Update(GameState.Direction.left);
                 break;
-
             case KeyEvent { Char.Value: 'j' }:
                 game.Update(GameState.Direction.down);
                 break;
