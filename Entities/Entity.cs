@@ -27,6 +27,11 @@ public abstract class Entity
     protected virtual void Update()
     {
         _tickCount++;
+        if (IsDead)
+        {
+            GameState.OnTick -= Update;
+            GameState.CurrentState -= CheckState;
+        }
     }
 
     protected void CheckPlayer()
