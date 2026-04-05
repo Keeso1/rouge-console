@@ -16,17 +16,24 @@ public sealed class GameState(ILogger logger, Style playerBody)
 
     public void Update(Direction? direction)
     {
-        // if(prevPosition != null)
-        // {
-        //
-        // }
-        //
         Point position = direction switch
         {
-            Direction.down => PrevPosition with { Y = PrevPosition.Y + 1 },
-            Direction.up => PrevPosition with { Y = PrevPosition.Y - 1 },
-            Direction.left => PrevPosition with { X = PrevPosition.X - 1 },
-            Direction.right => PrevPosition with { X = PrevPosition.X + 1 },
+            Direction.down => PrevPosition with
+            {
+                Y = Math.Clamp(PrevPosition.Y + 1, 0, Canvas.Size.Height - 1),
+            },
+            Direction.up => PrevPosition with
+            {
+                Y = Math.Clamp(PrevPosition.Y - 1, 0, Canvas.Size.Height - 1),
+            },
+            Direction.left => PrevPosition with
+            {
+                X = Math.Clamp(PrevPosition.X - 1, 0, Canvas.Size.Width - 1),
+            },
+            Direction.right => PrevPosition with
+            {
+                X = Math.Clamp(PrevPosition.X + 1, 0, Canvas.Size.Width - 1),
+            },
             _ => PrevPosition,
         };
 
