@@ -53,21 +53,4 @@ public class TileMap
 	{
 		Render();
 	}
-
-	public static (int, int)? GetPlayer()
-	{
-		//TODO: Temporär for loop. Ska senare vara en property
-		for (int y = 0; y < Tiles.GetLength(1); y++)
-		{
-			for (int x = 0; x < Tiles.GetLength(0); x++)
-			{
-				if (Tiles[y, x].Entity?.Type == EntityType.Player)
-				{
-					return (x, y);
-				}
-			}
-		}
-
-		return null;
-	}
 }

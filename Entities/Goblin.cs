@@ -1,45 +1,12 @@
 namespace RogueConsole.Entities;
 
-using RogueConsole.Core;
 using RogueConsole.World;
 
-public class Goblin : Entity
+public class Goblin(int health, int maxHealth) : Entity(health, maxHealth, EntityType.Enemy)
 {
-	private int _tickCount = 0;
-	private (int, int) _playerPos;
-
-	public Goblin(int health, int maxHealth) : base(health, maxHealth, EntityType.Enemy)
+	protected override void Update()
 	{
-		GameState.OnTick += Update;
-		GameState.CurrentState += CheckState;
-	}
-
-	public override void Update()
-	{
-		_tickCount++;
+		base.Update();
 		CheckPlayer();
 	}
-
-	private void CheckPlayer()
-	{
-		if (_tickCount % 2 == 0)
-		{
-			_playerPos = TileMap.GetPlayer() ?? (0, 0);
-
-		}
-	}
-
-	public override void CheckState(object? sender, GamePhase phase)
-	{
-		if (phase is GamePhase.Running) return;
-		if (phase is GamePhase.GameOver || phase is GamePhase.Victory)
-		{
-			GameState.OnTick -= Update;
-			GameState.CurrentState -= CheckState;
-		}
-
-	}
-
-
-
 }

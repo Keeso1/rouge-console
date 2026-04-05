@@ -1,10 +1,8 @@
 ﻿using System.Drawing;
-using System.Text;
 using Microsoft.Extensions.Logging;
-using RogueConsole.Assets;
 using RogueConsole.Core;
+using RogueConsole.Enums;
 using Sharpie;
-using Sharpie.Abstractions;
 using Sharpie.Backend;
 
 //Define the path to the text file
@@ -48,8 +46,9 @@ var game = new GameState(
 )
 {
     Canvas = canvas,
-    PrevPosition = new(terminal.Screen.Size.Width / 2, terminal.Screen.Size.Height / 2),
 };
+
+GameState.PrevPosition = new(terminal.Screen.Size.Width / 2, terminal.Screen.Size.Height / 2);
 
 terminal.Repeat(
     t =>
@@ -75,16 +74,16 @@ terminal.Run(
                 Environment.Exit(0);
                 break;
             case KeyEvent { Char.Value: 'h' }:
-                game.Update(GameState.Direction.left);
+                game.Update(Direction.left);
                 break;
             case KeyEvent { Char.Value: 'j' }:
-                game.Update(GameState.Direction.down);
+                game.Update(Direction.down);
                 break;
             case KeyEvent { Char.Value: 'k' }:
-                game.Update(GameState.Direction.up);
+                game.Update(Direction.up);
                 break;
             case KeyEvent { Char.Value: 'l' }:
-                game.Update(GameState.Direction.right);
+                game.Update(Direction.right);
                 break;
         }
         ;
