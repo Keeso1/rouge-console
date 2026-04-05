@@ -10,7 +10,7 @@ public sealed class GameState(ILogger logger, Style playerBody)
     public static event EventHandler<GamePhase> CurrentState;
     public static event Action? OnTick;
 
-    public Point PrevPosition { get; set; }
+    public static Point PrevPosition { get; set; }
 
     public required Canvas Canvas { get; set; }
 
