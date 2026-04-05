@@ -48,8 +48,9 @@ var game = new GameState(
 )
 {
     Canvas = canvas,
-    PrevPosition = new(terminal.Screen.Size.Width / 2, terminal.Screen.Size.Height / 2),
 };
+
+GameState.PrevPosition = new(terminal.Screen.Size.Width / 2, terminal.Screen.Size.Height / 2);
 
 terminal.Repeat(
     t =>
