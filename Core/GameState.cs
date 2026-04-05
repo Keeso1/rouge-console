@@ -2,6 +2,7 @@ using System.Drawing;
 using Microsoft.Extensions.Logging;
 using Sharpie;
 using Sharpie.Abstractions;
+using RogueConsole.Enums;
 
 namespace RogueConsole.Core;
 
@@ -11,16 +12,7 @@ public sealed class GameState(ILogger logger, Style playerBody)
     public static event Action? OnTick;
 
     public static Point PrevPosition { get; set; }
-
     public required Canvas Canvas { get; set; }
-
-    public enum Direction
-    {
-        down,
-        up,
-        left,
-        right,
-    }
 
     public void Update(Direction? direction)
     {
@@ -44,9 +36,4 @@ public sealed class GameState(ILogger logger, Style playerBody)
     }
 }
 
-public enum GamePhase
-{
-    Running,
-    GameOver,
-    Victory,
-}
+
