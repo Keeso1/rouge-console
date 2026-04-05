@@ -2,3 +2,5 @@
 ./obj/
 /obj/
 /bin/
+/console_log.txt
+./console_log.txt
