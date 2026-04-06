@@ -48,40 +48,57 @@ public class FloorLayout
             }
         }
 
-        var selIdx = rand.Next(activeRooms.Count);
         logger.LogInformation("active rooms count {ac}", activeRooms.Count);
-        (int, int) selRoom = activeRooms[selIdx];
-        var checkedRooms = CheckRooms(selRoom);
-        bool success = checkedRooms.Count > 0;
-        if (success)
+
+        // Retry until we find an expandable room or run out of candidates
+        while (activeRooms.Count > 0)
         {
-            var r = rand.Next(checkedRooms.Count);
-            var randomRoom = checkedRooms[r];
-            Rooms[randomRoom.Item1, randomRoom.Item2] = 1;
+            var selIdx = rand.Next(activeRooms.Count);
+            (int, int) selRoom = activeRooms[selIdx];
+            var checkedRooms = CheckRooms(selRoom);
+
+            if (checkedRooms.Count > 0)
+            {
+                // Successfully found an expandable room
+                var r = rand.Next(checkedRooms.Count);
+                var randomRoom = checkedRooms[r];
+                Rooms[randomRoom.Item1, randomRoom.Item2] = 1;
+                break;
+            }
+            else
+            {
+                // This room cannot expand, remove it from candidates
+                activeRooms.RemoveAt(selIdx);
+            }
         }
-        else { } //TODO: Fix this edgecase
     }
 
     private List<(int, int)> CheckRooms((int, int) room)
     {
         List<(int, int)> state = new();
+        int maxX = Rooms.GetLength(0);
+        int maxY = Rooms.GetLength(1);
 
-        if (Rooms[room.Item1 + 1, room.Item2] == 0)
+        // Check right neighbor
+        if (room.Item1 + 1 < maxX && Rooms[room.Item1 + 1, room.Item2] == 0)
         {
             state.Add((room.Item1 + 1, room.Item2));
         }
 
-        if (Rooms[room.Item1 - 1, room.Item2] == 0)
+        // Check left neighbor
+        if (room.Item1 - 1 >= 0 && Rooms[room.Item1 - 1, room.Item2] == 0)
         {
             state.Add((room.Item1 - 1, room.Item2));
         }
 
-        if (Rooms[room.Item1, room.Item2 + 1] == 0)
+        // Check down neighbor
+        if (room.Item2 + 1 < maxY && Rooms[room.Item1, room.Item2 + 1] == 0)
         {
             state.Add((room.Item1, room.Item2 + 1));
         }
 
-        if (Rooms[room.Item1, room.Item2 - 1] == 0)
+        // Check up neighbor
+        if (room.Item2 - 1 >= 0 && Rooms[room.Item1, room.Item2 - 1] == 0)
         {
             state.Add((room.Item1, room.Item2 - 1));
         }

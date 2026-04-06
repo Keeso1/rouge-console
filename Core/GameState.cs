@@ -6,13 +6,14 @@ using RogueConsole.Enums;
 
 namespace RogueConsole.Core;
 
-public sealed class GameState(ILogger logger, Style playerBody)
+public sealed class GameState(ILogger logger, Style playerBody, int[,]? floorLayout = null)
 {
     public static event EventHandler<GamePhase> CurrentState;
     public static event Action? OnTick;
 
     public static Point PrevPosition { get; set; }
     public required Canvas Canvas { get; set; }
+    public int[,]? FloorLayout { get; private set; } = floorLayout;
 
     public void Update(Direction? direction)
     {
@@ -42,5 +43,4 @@ public sealed class GameState(ILogger logger, Style playerBody)
         PrevPosition = position;
     }
 }
-
 

@@ -51,7 +51,8 @@ var game = new GameState(
     {
         Attributes = VideoAttribute.Bold,
         ColorMixture = terminal.Colors.MixColors(StandardColor.Magenta, StandardColor.Black),
-    }
+    },
+    floor.Rooms
 )
 {
     Canvas = canvas,
