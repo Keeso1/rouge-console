@@ -1,12 +1,12 @@
 using System.Drawing;
 using Microsoft.Extensions.Logging;
+using RogueConsole.Enums;
 using Sharpie;
 using Sharpie.Abstractions;
-using RogueConsole.Enums;
 
 namespace RogueConsole.Core;
 
-public sealed class GameState(ILogger logger, Style playerBody)
+public sealed class GameState(ILogger logger, Style playerBody, FloorLayout floorLayout)
 {
     public static event EventHandler<GamePhase> CurrentState;
     public static event Action? OnTick;
@@ -42,5 +42,3 @@ public sealed class GameState(ILogger logger, Style playerBody)
         PrevPosition = position;
     }
 }
-
-
