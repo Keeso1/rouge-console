@@ -37,8 +37,6 @@ var terminal = new Terminal(
 );
 
 Canvas canvas = new(terminal.Screen.Size);
-var room = new ItemRoom(canvas.Size.Width, canvas.Size.Height, canvas);
-room.Render();
 
 FloorLayout floor = new(logger, canvas);
 for (var room = 0; room < settings.NumberOfRooms; room++)
