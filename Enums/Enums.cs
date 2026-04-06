@@ -20,3 +20,11 @@ public enum EntityType
     Player,
     Enemy,
 }
+
+public enum RoomTypes
+{
+    Spawn,
+    Item,
+    Boss,
+    Normal
+}
