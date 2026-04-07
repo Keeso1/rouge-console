@@ -109,6 +109,6 @@ public class TileMap
             RoomTypes.Normal => new NormalMap(canvas),
             RoomTypes.Item => new ItemRoom(canvas, logger),
             RoomTypes.Boss => new BossRoom(canvas),
-            _ => new TileMap(canvas),
+            _ => throw new ArgumentOutOfRangeException(nameof(type), type, "Unsupported room type"),
         };
 }
