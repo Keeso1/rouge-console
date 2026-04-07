@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 using Microsoft.Extensions.Logging;
 using RogueConsole.Core;
-using RogueConsole.World.Maps;
 using RogueConsole.Enums;
+using RogueConsole.World.Maps;
 using Sharpie;
 using Sharpie.Backend;
 
@@ -38,13 +38,7 @@ var terminal = new Terminal(
 
 Canvas canvas = new(terminal.Screen.Size);
 
-FloorLayout floor = new(logger, canvas);
-for (var room = 0; room < settings.NumberOfRooms; room++)
-{
-    floor.Generate(canvas);
-    logger.LogInformation("Run nr {room}", room);
-    logger.LogInformation("Rooms: {rooms}", FloorLayout.RoomsToString(floor.Rooms));
-}
+FloorLayout floor = new(logger, canvas, settings);
 
 var game = new GameState(
     logger,

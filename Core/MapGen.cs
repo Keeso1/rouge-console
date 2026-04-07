@@ -3,8 +3,8 @@ namespace RogueConsole.Core;
 using System.Linq;
 using System.Text;
 using Microsoft.Extensions.Logging;
-using RogueConsole.World;
 using RogueConsole.Enums;
+using RogueConsole.World;
 using Sharpie;
 
 public class FloorLayout
@@ -12,11 +12,18 @@ public class FloorLayout
     public TileMap[,] Rooms { get; private set; } = new TileMap[16, 16];
     private readonly ILogger _logger;
 
-    public FloorLayout(ILogger Logger, Canvas canvas)
+    public FloorLayout(ILogger Logger, Canvas canvas, GameSettings settings)
     {
         _logger = Logger;
         Rooms[8, 8] = TileMap.GetRoom(RoomTypes.Spawn, canvas, _logger);
         Rooms[8, 8].InitMap();
+
+        for (var room = 0; room < settings.NumberOfRooms; room++)
+        {
+            Generate(canvas);
+            _logger.LogInformation("Run nr {room}", room);
+            _logger.LogInformation("Rooms: {rooms}", FloorLayout.RoomsToString(Rooms));
+        }
     }
 
     public static string RoomsToString(TileMap[,] Rooms) //Helper func to see the grid in a clean way
