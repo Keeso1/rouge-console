@@ -28,4 +28,8 @@ public static class GetCanvasCoords
 			yield return (y, setCoord);
 		}
 	}
+
+	public static (int, int) Add(this (int, int) t, int num1, int num2) => (t.Item1 + num1, t.Item2 + num2);
+	public static (int, int) Subtract(this (int, int) t, int num1, int num2) => (t.Item1 - num1, t.Item2 - num2);
+	public static (int, int) Multiply(this (int, int) t1, int f) => (t1.Item1 * f, t1.Item2 * f);
 }

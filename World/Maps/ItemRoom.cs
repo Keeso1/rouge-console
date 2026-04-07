@@ -12,7 +12,6 @@ public class ItemRoom(Canvas canvas, ILogger logger) : TileMap(canvas)
         base.InitMap();
         Active = true;
         RoomType = RoomTypes.Item;
-        var (c1, c2) = GetCanvasCoords.GetCanvasCenter(canvas);
-        Set((c1 + 1, c2 + 1), Tile.Chest);
+        Set(GetCanvasCoords.GetCanvasCenter(canvas).Add(2, 2), Tile.Chest);
     }
 }

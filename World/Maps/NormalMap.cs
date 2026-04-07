@@ -11,10 +11,8 @@ public class NormalMap(Canvas canvas) : TileMap(canvas)
 		Active = true;
 		base.InitMap();
 		RoomType = RoomTypes.Normal;
-		var (g1, g2) = GetCanvasCoords.GetCanvasTopCenter(Canvas);
-		var (g3, g4) = GetCanvasCoords.GetCanvasBottomCenter(Canvas);
-		Set((g1, g2 + 2), Tile.Goblin);
-		Set((g3, g4 - 2), Tile.Goblin);
+		Set(GetCanvasCoords.GetCanvasTopCenter(Canvas).Add(0, 2), Tile.Goblin);
+		Set(GetCanvasCoords.GetCanvasBottomCenter(Canvas).Subtract(0, 1), Tile.Goblin);
 	}
 
 }
