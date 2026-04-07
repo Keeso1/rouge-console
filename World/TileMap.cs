@@ -13,7 +13,6 @@ public class TileMap
 {
     public Tile[,] Tiles { get; private set; }
     public Canvas Canvas { get; init; }
-    public bool Active { get; set; }
     public RoomTypes RoomType { get; set; }
 
     public TileMap(Canvas canvas)
@@ -109,6 +108,7 @@ public class TileMap
             RoomTypes.Spawn => new SpawnRoom(canvas),
             RoomTypes.Normal => new NormalMap(canvas),
             RoomTypes.Item => new ItemRoom(canvas, logger),
+            RoomTypes.Boss => new BossRoom(canvas),
             _ => new TileMap(canvas),
         };
 }
