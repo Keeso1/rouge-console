@@ -8,7 +8,6 @@ public class NormalMap(Canvas canvas) : TileMap(canvas)
 {
 	public override void InitMap()
 	{
-		Active = true;
 		base.InitMap();
 		RoomType = RoomTypes.Normal;
 		Set(GetCanvasCoords.GetCanvasTopCenter(Canvas).Add(0, 2), Tile.Goblin);
