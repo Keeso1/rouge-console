@@ -10,9 +10,7 @@ public class BossRoom(Canvas canvas) : TileMap(canvas)
     {
         base.InitMap();
         RoomType = RoomTypes.Boss;
-        var (g1, g2) = GetCanvasCoords.GetCanvasTopCenter(Canvas);
-        var (g3, g4) = GetCanvasCoords.GetCanvasBottomCenter(Canvas);
-        Set((g1, g2 + 2), Tile.Goblin);
-        Set((g3, g4 - 2), Tile.Goblin);
+        Set(GetCanvasCoords.GetCanvasTopCenter(Canvas).Add(0, 2).Clamp(canvas.Size), Tile.Goblin);
+        Set(GetCanvasCoords.GetCanvasBottomCenter(Canvas).Subtract(0, 2).Clamp(canvas.Size), Tile.Goblin);
     }
 }

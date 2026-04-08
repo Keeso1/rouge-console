@@ -1,10 +1,12 @@
 namespace RogueConsole.Core;
 
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using RogueConsole.Enums;
 using RogueConsole.World;
+using RogueConsole.Utils;
 using Sharpie;
 
 public class FloorLayout
@@ -15,7 +17,7 @@ public class FloorLayout
     public FloorLayout(ILogger Logger, Canvas canvas, GameSettings settings)
     {
         _logger = Logger;
-        Rooms[8, 8] = TileMap.GetRoom(RoomTypes.Spawn, canvas, _logger);
+        Rooms[8, 8] = TileMap.GetRoom(RoomTypes.Item, canvas, _logger);
         Rooms[8, 8].InitMap();
 
         for (var room = 0; room < settings.NumberOfRooms; room++)
@@ -134,41 +136,18 @@ public class FloorLayout
     public List<(int, int)> CheckRooms((int, int) room)
     {
         _logger.LogInformation("Coming into checkrooms");
-        List<(int, int)> state = new();
-        int maxX = Rooms.GetLength(0);
-        int maxY = Rooms.GetLength(1);
+        Size size = new(Rooms.GetLength(0), Rooms.GetLength(1));
 
         _logger.LogInformation(
             "room.Item1 {item1} \n room.Item2 {item2} \n maxX {maxX} \n maxY {maxY}",
             room.Item1,
             room.Item2,
-            maxX,
-            maxY
+            size.Width,
+            size.Height
         );
-        // Check right neighbor
-        if (room.Item1 + 1 < maxX && Rooms[room.Item1 + 1, room.Item2] == null)
-        {
-            state.Add((room.Item1 + 1, room.Item2));
-        }
 
-        // Check left neighbor
-        if (room.Item1 - 1 >= 0 && Rooms[room.Item1 - 1, room.Item2] == null)
-        {
-            state.Add((room.Item1 - 1, room.Item2));
-        }
-
-        // Check down neighbor
-        if (room.Item2 + 1 < maxY && Rooms[room.Item1, room.Item2 + 1] == null)
-        {
-            state.Add((room.Item1, room.Item2 + 1));
-        }
-
-        // Check up neighbor
-        if (room.Item2 - 1 >= 0 && Rooms[room.Item1, room.Item2 - 1] == null)
-        {
-            state.Add((room.Item1, room.Item2 - 1));
-        }
-
-        return state;
+        return room.GetCardinalNeighbours()
+            .Where(r => r.InBounds(size) && Rooms[r.x, r.y] == null)
+            .ToList();
     }
 }
