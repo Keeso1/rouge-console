@@ -2,12 +2,11 @@ using System.Drawing;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using RogueConsole.Enums;
-using RogueConsole.World;
 using RogueConsole.Utils;
+using RogueConsole.World;
 using Sharpie;
 
 namespace RogueConsole.Core;
-
 
 public class MapGen
 {
@@ -27,33 +26,14 @@ public class MapGen
             _logger.LogInformation("Rooms: {rooms}", RoomsToString(Rooms));
         } // Generate layout
 
-        GenerateBossRoom(_logger, canvas); // Add bossroom at furthest x value
+        GenerateBossRoom(_logger, canvas); // Add bossroom at furthest position
     }
 
-    private void GenerateBossRoom(ILogger _logger, Canvas canvas) // TODO: Improve the select to choose the room furthest i.e most moves from spawn
+    private void GenerateBossRoom(ILogger _logger, Canvas canvas)
     {
-        var biggestDiff = (8, 8);
-        foreach ((int, int) tuple in GetNonEmptyRooms())
-        {
-            if (Math.Abs(tuple.Item1 - 8) > Math.Abs(biggestDiff.Item1 - 8))
-            {
-                biggestDiff = tuple;
-            }
-            ;
-
-            _logger.LogInformation("activerooms: {t}", tuple);
-            _logger.LogInformation("BiggestDiff on X axis: {diff}", biggestDiff);
-        }
-        Rooms[biggestDiff.Item1, biggestDiff.Item2] = TileMap.GetRoom(
-            RoomTypes.Boss,
-            canvas
-        );
-
-        Rooms[biggestDiff.Item1, biggestDiff.Item2].InitMap();
-        _logger.LogInformation(
-            "RoomType of biggestDiff {type}",
-            Rooms[biggestDiff.Item1, biggestDiff.Item2].RoomType
-        );
+        (int x, int y) = BFS.Execute(Rooms, _logger); //Breadth-first-search
+        Rooms[x, y] = TileMap.GetRoom(RoomTypes.Boss, canvas);
+        Rooms[x, y].InitMap();
 
         _logger.LogInformation("Rooms: {rooms}", RoomsToString(Rooms));
     }
