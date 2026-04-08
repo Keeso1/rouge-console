@@ -6,7 +6,7 @@ using Sharpie.Abstractions;
 
 namespace RogueConsole.Core;
 
-public sealed class GameState(ILogger logger, Style playerBody, FloorLayout floorLayout)
+public sealed class GameState(ILogger logger, Style playerBody, MapGen mapGen)
 {
     public static event EventHandler<GamePhase> CurrentState;
     public static event Action? OnTick;
@@ -37,7 +37,7 @@ public sealed class GameState(ILogger logger, Style playerBody, FloorLayout floo
             _ => PrevPosition,
         };
 
-        floorLayout.Rooms[8, 8].RenderToCanvas(logger);
+        mapGen.Rooms[8, 8].RenderToCanvas(logger);
         Canvas.Glyph(position, Assets.Assets.Player, playerBody);
         PrevPosition = position;
     }

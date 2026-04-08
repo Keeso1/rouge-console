@@ -38,7 +38,7 @@ var terminal = new Terminal(
 
 Canvas canvas = new(terminal.Screen.Size);
 
-FloorLayout floor = new(logger, canvas, settings);
+MapGen floor = new(logger, canvas, settings);
 
 var game = new GameState(
     logger,
