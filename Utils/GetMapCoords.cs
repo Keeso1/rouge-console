@@ -1,4 +1,3 @@
-using System.Drawing;
 using Sharpie;
 
 namespace RogueConsole.Utils;

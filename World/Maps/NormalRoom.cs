@@ -1,8 +1,9 @@
-namespace RogueConsole.World.Maps;
-
 using RogueConsole.Enums;
 using RogueConsole.Utils;
 using Sharpie;
+
+namespace RogueConsole.World.Maps;
+
 
 public class NormalRoom(Canvas canvas) : TileMap(canvas)
 {

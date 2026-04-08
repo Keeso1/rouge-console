@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using RogueConsole.Enums;
 using RogueConsole.Assets;
 using Sharpie;
-using Sharpie.Abstractions;
 
 namespace RogueConsole.Core;
 

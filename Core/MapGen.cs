@@ -1,13 +1,13 @@
-namespace RogueConsole.Core;
-
 using System.Drawing;
-using System.Linq;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using RogueConsole.Enums;
 using RogueConsole.World;
 using RogueConsole.Utils;
 using Sharpie;
+
+namespace RogueConsole.Core;
+
 
 public class MapGen
 {

@@ -1,7 +1,5 @@
 using System.Drawing;
 using Microsoft.Extensions.Logging;
-using RogueConsole.Core;
-using RogueConsole.Entities;
 using RogueConsole.Enums;
 using RogueConsole.Utils;
 using RogueConsole.World.Maps;

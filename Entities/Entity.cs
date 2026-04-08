@@ -1,8 +1,9 @@
-namespace RogueConsole.Entities;
-
 using System.Drawing;
 using RogueConsole.Core;
 using RogueConsole.Enums;
+
+namespace RogueConsole.Entities;
+
 
 public abstract class Entity
 {

@@ -1,5 +1,4 @@
 using RogueConsole.Enums;
-using RogueConsole.Utils;
 using Sharpie;
 
 namespace RogueConsole.World.Maps;

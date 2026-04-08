@@ -1,8 +1,9 @@
-namespace RogueConsole.World;
-
 using RogueConsole.Entities;
 using RogueConsole.Assets;
 using System.Text;
+
+namespace RogueConsole.World;
+
 
 public class Tile
 {
