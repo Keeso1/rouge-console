@@ -1,6 +1,7 @@
-namespace RogueConsole.Utils;
-
+using System.Drawing;
 using Sharpie;
+
+namespace RogueConsole.Utils;
 
 public static class GetCanvasCoords
 {
@@ -20,7 +21,6 @@ public static class GetCanvasCoords
 		}
 	}
 
-
 	public static IEnumerable<(int, int)> GetHorizontalLine(int setCoord, int from, int to)
 	{
 		for (int y = from; y < to; y++)
@@ -29,7 +29,4 @@ public static class GetCanvasCoords
 		}
 	}
 
-	public static (int, int) Add(this (int, int) t, int num1, int num2) => (t.Item1 + num1, t.Item2 + num2);
-	public static (int, int) Subtract(this (int, int) t, int num1, int num2) => (t.Item1 - num1, t.Item2 - num2);
-	public static (int, int) Multiply(this (int, int) t1, int f) => (t1.Item1 * f, t1.Item2 * f);
 }
