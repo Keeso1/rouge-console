@@ -106,7 +106,7 @@ public class TileMap
         type switch
         {
             RoomTypes.Spawn => new SpawnRoom(canvas),
-            RoomTypes.Normal => new NormalMap(canvas),
+            RoomTypes.Normal => new NormalRoom(canvas),
             RoomTypes.Item => new ItemRoom(canvas, logger),
             RoomTypes.Boss => new BossRoom(canvas),
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, "Unsupported room type"),

@@ -4,7 +4,7 @@ using RogueConsole.Enums;
 using RogueConsole.Utils;
 using Sharpie;
 
-public class NormalMap(Canvas canvas) : TileMap(canvas)
+public class NormalRoom(Canvas canvas) : TileMap(canvas)
 {
 	public override void InitMap()
 	{
