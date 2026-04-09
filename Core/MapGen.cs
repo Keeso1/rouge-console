@@ -67,7 +67,7 @@ public class MapGen
 
     private void GenerateBossRoom(ILogger _logger, Canvas canvas)
     {
-        (int x, int y) = BFS.Execute(Rooms, _logger); //Breadth-first-search
+        (int x, int y) = BFS.Execute(Rooms); //Breadth-first-search
         Rooms[x, y] = TileMap.GetRoom(RoomTypes.Boss, canvas);
         Rooms[x, y].InitMap();
 
