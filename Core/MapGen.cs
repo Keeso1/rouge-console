@@ -1,5 +1,6 @@
 using System.Drawing;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RogueConsole.Enums;
 using RogueConsole.Utils;
@@ -12,21 +13,23 @@ public class MapGen
 {
     public TileMap[,] Rooms { get; private set; }
     private readonly ILogger _logger;
-
-    private Size Size { get; set; }
+    private GameSettings _settings { get; set; }
 
     public MapGen(ILogger Logger, Canvas canvas, GameSettings settings)
     {
-        Rooms = new TileMap[(settings.NumberOfRooms + 1) * 2, (settings.NumberOfRooms + 1) * 2];
-        // Size = new(settings.NumberOfRooms + 1, settings.NumberOfRooms + 1);
+        _settings = settings;
+        Rooms = new TileMap[(_settings.NumberOfRooms + 1) * 2, (_settings.NumberOfRooms + 1) * 2];
         _logger = Logger;
-        Rooms[8, 8] = TileMap.GetRoom(RoomTypes.Spawn, canvas);
-        Rooms[8, 8].InitMap();
+        Rooms[_settings.NumberOfRooms + 1, _settings.NumberOfRooms + 1] = TileMap.GetRoom(
+            RoomTypes.Spawn,
+            canvas
+        );
+        Rooms[_settings.NumberOfRooms + 1, _settings.NumberOfRooms + 1].InitMap();
 
-        _logger.LogInformation("Settings number of rooms {rr}", settings.NumberOfRooms);
+        _logger.LogInformation("_settings number of rooms {rr}", _settings.NumberOfRooms);
         _logger.LogInformation("size: {x}x{y}", Rooms.GetLength(0), Rooms.GetLength(1));
 
-        for (var room = 0; room < settings.NumberOfRooms; room++)
+        for (var room = 0; room < _settings.NumberOfRooms; room++)
         {
             Generate(canvas);
             _logger.LogInformation("Run nr {room}", room);
@@ -80,7 +83,7 @@ public class MapGen
 
     private void GenerateBossRoom(ILogger _logger, Canvas canvas)
     {
-        (int x, int y) = BFS.Execute(Rooms); //Breadth-first-search
+        (int x, int y) = BFS.Execute(Rooms, _settings); //Breadth-first-search
         Rooms[x, y] = TileMap.GetRoom(RoomTypes.Boss, canvas);
         Rooms[x, y].InitMap();
 
@@ -89,6 +92,7 @@ public class MapGen
 
     public void SetDoors()
     {
+        Size size = new(Rooms.GetLength(0), Rooms.GetLength(1));
         List<(int x, int y)> activeRooms = GetNonEmptyRooms();
         foreach (var room in activeRooms)
         {
@@ -96,14 +100,15 @@ public class MapGen
             var neighbors = room.GetCardinalNeighbours().ToList();
 
             for (
-                int neghborIndex = (int)Cardinals.north;
-                neghborIndex < neighbors.Count;
-                neghborIndex++
+                int neighborIndex = (int)Cardinals.North;
+                neighborIndex < neighbors.Count;
+                neighborIndex++
             )
             {
-                if (Rooms[neighbors[neghborIndex].x, neighbors[neghborIndex].y] != null)
+                var neighbor = neighbors[neighborIndex];
+                if (Rooms[neighbor.x, neighbor.y] != null && neighbor.InBounds(size))
                 {
-                    activeNeighbors.Add((Cardinals)neghborIndex);
+                    activeNeighbors.Add((Cardinals)neighborIndex);
                 }
             }
 
@@ -195,8 +200,8 @@ public class MapGen
             "room.Item1 {item1} \n room.Item2 {item2} \n maxX {maxX} \n maxY {maxY}",
             room.Item1,
             room.Item2,
-            Size.Width,
-            Size.Height
+            size.Width,
+            size.Height
         );
 
         return room.GetCardinalNeighbours()
