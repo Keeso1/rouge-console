@@ -1,7 +1,7 @@
 using System.Drawing;
 using Microsoft.Extensions.Logging;
-using RogueConsole.Enums;
 using RogueConsole.Assets;
+using RogueConsole.Enums;
 using Sharpie;
 
 namespace RogueConsole.Core;
@@ -18,19 +18,19 @@ public sealed class GameState(Style playerBody, MapGen mapGen)
     {
         Point position = direction switch
         {
-            Direction.down => PrevPosition with
+            Direction.Down => PrevPosition with
             {
                 Y = Math.Clamp(PrevPosition.Y + 1, 0, Canvas.Size.Height - 1),
             },
-            Direction.up => PrevPosition with
+            Direction.Up => PrevPosition with
             {
                 Y = Math.Clamp(PrevPosition.Y - 1, 0, Canvas.Size.Height - 1),
             },
-            Direction.left => PrevPosition with
+            Direction.Left => PrevPosition with
             {
                 X = Math.Clamp(PrevPosition.X - 1, 0, Canvas.Size.Width - 1),
             },
-            Direction.right => PrevPosition with
+            Direction.Right => PrevPosition with
             {
                 X = Math.Clamp(PrevPosition.X + 1, 0, Canvas.Size.Width - 1),
             },
