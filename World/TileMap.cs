@@ -12,6 +12,7 @@ public class TileMap
     public Tile[,] Tiles { get; private set; }
     public Canvas Canvas { get; init; }
     public RoomTypes RoomType { get; set; }
+    public List<Cardinals> Neighbors { get; set; }
 
     public TileMap(Canvas canvas)
     {

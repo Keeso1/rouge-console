@@ -80,10 +80,10 @@ static class BFS
     }
 
     // Driver Code
-    public static (int x, int y) Execute(TileMap[,] Rooms)
+    public static (int x, int y) Execute(TileMap[,] Rooms, GameSettings settings)
     {
         // Declare the visited array
         bool[,] vis = new bool[ROW, COL];
-        return Search(Rooms, vis, 8, 8);
+        return Search(Rooms, vis, settings.NumberOfRooms + 1, settings.NumberOfRooms + 1);
     }
 }

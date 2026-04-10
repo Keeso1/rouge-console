@@ -9,10 +9,18 @@ public enum GamePhase
 
 public enum Direction
 {
-    down,
-    up,
-    left,
-    right,
+    Down,
+    Up,
+    Left,
+    Right,
+}
+
+public enum Cardinals
+{
+    North,
+    West,
+    East,
+    South,
 }
 
 public enum EntityType

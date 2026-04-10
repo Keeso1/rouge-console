@@ -77,16 +77,16 @@ terminal.Run(
                 Environment.Exit(0);
                 break;
             case KeyEvent { Char.Value: 'h' }:
-                game.Update(Direction.left);
+                game.Update(Direction.Left);
                 break;
             case KeyEvent { Char.Value: 'j' }:
-                game.Update(Direction.down);
+                game.Update(Direction.Down);
                 break;
             case KeyEvent { Char.Value: 'k' }:
-                game.Update(Direction.up);
+                game.Update(Direction.Up);
                 break;
             case KeyEvent { Char.Value: 'l' }:
-                game.Update(Direction.right);
+                game.Update(Direction.Right);
                 break;
         }
         ;
