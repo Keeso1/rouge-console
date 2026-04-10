@@ -13,6 +13,18 @@ public static class TupleExtensions
         yield return (t.x, t.y + 1); //South
     }
 
+    public static Cardinals ToCardinal(this (int x, int y) offset)
+    {
+        return offset switch
+        {
+            (0, -1) => Cardinals.North,
+            (-1, 0) => Cardinals.West,
+            (1, 0) => Cardinals.East,
+            (0, 1) => Cardinals.South,
+            _ => Cardinals.Unknown,
+        };
+    }
+
     public static bool InBounds(this (int x, int y) t, Size size) =>
         t.x >= 0 && t.y >= 0 && t.x < size.Width && t.y < size.Height;
 

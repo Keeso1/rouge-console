@@ -88,21 +88,16 @@ public class MapGen
         foreach (var room in activeRooms)
         {
             List<Cardinals> activeNeighbors = [];
-            var neighbors = room.GetCardinalNeighbours().ToList();
 
-            for (
-                int neighborIndex = (int)Cardinals.North;
-                neighborIndex < neighbors.Count;
-                neighborIndex++
-            )
+            foreach (var neighbor in room.GetCardinalNeighbours())
             {
-                var neighbor = neighbors[neighborIndex];
                 if (Rooms[neighbor.x, neighbor.y] != null && neighbor.InBounds(Size))
                 {
-                    activeNeighbors.Add((Cardinals)neighborIndex);
+                    activeNeighbors.Add((neighbor.x - room.x, neighbor.y - room.y).ToCardinal());
                 }
             }
 
+            _logger.LogInformation("activeNeighs {neg}", activeNeighbors);
             Rooms[room.x, room.y].Neighbors = activeNeighbors;
         }
     }

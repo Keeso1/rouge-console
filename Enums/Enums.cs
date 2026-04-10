@@ -21,6 +21,7 @@ public enum Cardinals
     West,
     East,
     South,
+    Unknown,
 }
 
 public enum EntityType
