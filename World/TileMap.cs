@@ -17,18 +17,7 @@ public class TileMap
     public TileMap(Canvas canvas)
     {
         Canvas = canvas;
-
-        // GameState.OnTick += Update;
     }
-
-    // public TileMap(Canvas canvas, RoomTypes type = RoomTypes.Normal)
-    // {
-    // 	RoomType = RoomTypes.Normal;
-    // 	Canvas = canvas;
-    // 	InitMap();
-    //
-    // 	GameState.OnTick += Update;
-    // }
 
     public Tile Get(int x, int y) => Tiles[x, y];
 
@@ -66,6 +55,28 @@ public class TileMap
         }
     }
 
+	public void RenderDoors(){
+		foreach(Cardinals neighbor in Neighbors){
+			switch (neighbor)
+			{
+				case Cardinals.North:
+					Set(GetCanvasCoords.GetCanvasTopCenter(Canvas), Tile.Door);
+					break;
+				case Cardinals.East:
+					Set(GetCanvasCoords.GetCanvasRightCenter(Canvas), Tile.Door);
+					break;
+				case Cardinals.West:
+					Set(GetCanvasCoords.GetCanvasLeftCenter(Canvas), Tile.Door);
+					break;
+				case Cardinals.South:
+					Set(GetCanvasCoords.GetCanvasBottomCenter(Canvas), Tile.Door);
+					break;
+				default:
+					throw new Exception("Neighbor must have a cardinal direction");
+			};
+		}
+	}
+
     public virtual void InitMap()
     {
         Tiles = new Tile[Canvas.Size.Width, Canvas.Size.Height];
@@ -80,6 +91,9 @@ public class TileMap
             GetCanvasCoords.GetHorizontalLine(Canvas.Size.Height - 1, 0, Canvas.Size.Width),
             Tile.Wall
         );
+		if(Neighbors != null){
+			RenderDoors();
+		}
     }
 
     public void RenderToCanvas()

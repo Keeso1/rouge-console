@@ -17,6 +17,7 @@ public class Tile
 	public static Tile Goblin => new() { Glyph = GameConstants.Enemy, Entity = new Goblin(100, 100) };
 	public static Tile Player => new() { Glyph = GameConstants.Player };
 	public static Tile Chest => new() { Glyph = GameConstants.Item };
+	public static Tile Door => new() { Glyph = GameConstants.Door };
 }
 
 
