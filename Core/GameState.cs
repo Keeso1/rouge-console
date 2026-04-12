@@ -5,10 +5,11 @@ using Vimonia.Enums;
 using Vimonia.Utils;
 using Vimonia.World;
 using Sharpie;
+using System.Net.NetworkInformation;
 
 namespace Vimonia.Core;
 
-public sealed class GameState(Style playerBody, MapGen floor)
+public sealed class GameState(Style playerBody, MapGen floor, ILogger logger)
 {
     public static event EventHandler<GamePhase> CurrentState;
     public static event Action? OnTick;
@@ -40,27 +41,49 @@ public sealed class GameState(Style playerBody, MapGen floor)
             },
             _ => PrevPosition,
         };
-		
-		if (CurrentRoom.Tiles[position.X, position.Y] == Tile.Door)
+
+        logger.LogInformation("activeNeighs {neg}", CurrentRoom.Neighbors);
+		logger.LogInformation("CurrentRoom.Tiles[posx, posy] = {tile}", CurrentRoom.Tiles[position.X, position.Y].Glyph == GameConstants.Door);
+		if (CurrentRoom.Tiles[position.X, position.Y].Glyph == GameConstants.Door) // Check if tile is door
 		{
-			var (roomX, roomY) = CurrentRoom.GetCoordsInFloor(floor);
-			if ((roomX, roomY) == (-1, -1))
-			{
-				throw new Exception("Current room has no coords");
-			}
-	   
-			CurrentRoom = (position.X, position.Y) switch
-			{
-				var p when p == GetCanvasCoords.GetCanvasTopCenter(Canvas)    => floor.Rooms[roomX, roomY - 1], // North
-				var p when p == GetCanvasCoords.GetCanvasBottomCenter(Canvas) => floor.Rooms[roomX, roomY + 1], // South
-				var p when p == GetCanvasCoords.GetCanvasLeftCenter(Canvas)   => floor.Rooms[roomX - 1, roomY], // West
-				var p when p == GetCanvasCoords.GetCanvasRightCenter(Canvas)  => floor.Rooms[roomX + 1, roomY], // East
-				_ => throw new Exception("Position is somehow not at the door")
-			};
+			position = EnterNewRoom(position);
 		};
+
 
         CurrentRoom.RenderToCanvas();
         Canvas.Glyph(position, GameConstants.Player, playerBody);
         PrevPosition = position;
     }
+
+	public Point EnterNewRoom(Point position)
+	{
+		var (roomX, roomY) = CurrentRoom.GetCoordsInFloor(floor);
+		if ((roomX, roomY) == (-1, -1))
+		{
+			throw new Exception("Current room has no coords");
+		}
+   
+		CurrentRoom = (position.X, position.Y) switch
+		{
+			var p when p == GetCanvasCoords.GetCanvasTopCenter(Canvas)    => floor.Rooms[roomX, roomY - 1], // North
+			var p when p == GetCanvasCoords.GetCanvasBottomCenter(Canvas) => floor.Rooms[roomX, roomY + 1], // South
+			var p when p == GetCanvasCoords.GetCanvasLeftCenter(Canvas)   => floor.Rooms[roomX - 1, roomY], // West
+			var p when p == GetCanvasCoords.GetCanvasRightCenter(Canvas)  => floor.Rooms[roomX + 1, roomY], // East
+			_ => throw new Exception("Position is somehow not at the door")
+		};
+
+		var (newRoomx, newRoomy) = CurrentRoom.GetCoordsInFloor(floor);
+		var offset = (newRoomx - roomX, newRoomy - roomY);
+
+		var directionOfNewRoom = Utils.TupleExtensions.ToCardinal(offset);
+		position = directionOfNewRoom switch{
+			Cardinals.North => new(GetCanvasCoords.GetCanvasBottomCenter(Canvas).Item1, GetCanvasCoords.GetCanvasBottomCenter(Canvas).Item2 - 1), // minus one so it is not on the door
+			Cardinals.East => new(GetCanvasCoords.GetCanvasLeftCenter(Canvas).Item1 + 1, GetCanvasCoords.GetCanvasLeftCenter(Canvas).Item2),
+			Cardinals.West => new(GetCanvasCoords.GetCanvasRightCenter(Canvas).Item1 - 1, GetCanvasCoords.GetCanvasLeftCenter(Canvas).Item2),
+			Cardinals.South => new(GetCanvasCoords.GetCanvasRightCenter(Canvas).Item1, GetCanvasCoords.GetCanvasLeftCenter(Canvas).Item2 + 1),
+			Cardinals.Unknown => throw new Exception("New room hasn't got a direction relative to old room"),
+			_=> throw new Exception("directionOfNewRoom is not valid")
+		};
+		return position;
+	}
 }
