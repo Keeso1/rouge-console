@@ -1,4 +1,4 @@
-namespace RogueConsole.Entities;
+namespace Vimonia.Entities;
 
 public class Goblin(int health, int maxHealth) : Entity(health, maxHealth, EntityType.Enemy)
 {

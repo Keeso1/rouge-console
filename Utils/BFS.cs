@@ -1,4 +1,4 @@
-using RogueConsole.World;
+using Vimonia.World;
 
 static class BFS
 {

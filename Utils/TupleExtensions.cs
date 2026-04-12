@@ -1,7 +1,7 @@
 using System.Drawing;
-using RogueConsole.Enums;
+using Vimonia.Enums;
 
-namespace RogueConsole.Utils;
+namespace Vimonia.Utils;
 
 public static class TupleExtensions
 {

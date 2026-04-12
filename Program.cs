@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using Microsoft.Extensions.Logging;
-using RogueConsole.Core;
-using RogueConsole.Enums;
+using Vimonia.Core;
+using Vimonia.Enums;
 using Sharpie;
 using Sharpie.Backend;
 

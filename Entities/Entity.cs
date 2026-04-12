@@ -1,8 +1,8 @@
 using System.Drawing;
-using RogueConsole.Core;
-using RogueConsole.Enums;
+using Vimonia.Core;
+using Vimonia.Enums;
 
-namespace RogueConsole.Entities;
+namespace Vimonia.Entities;
 
 
 public abstract class Entity

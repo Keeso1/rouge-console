@@ -1,8 +1,8 @@
-using RogueConsole.Enums;
-using RogueConsole.Utils;
+using Vimonia.Enums;
+using Vimonia.Utils;
 using Sharpie;
 
-namespace RogueConsole.World.Maps;
+namespace Vimonia.World.Maps;
 
 
 public class NormalRoom(Canvas canvas) : TileMap(canvas)

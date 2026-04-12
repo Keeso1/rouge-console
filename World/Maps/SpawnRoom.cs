@@ -1,7 +1,7 @@
-using RogueConsole.Enums;
+using Vimonia.Enums;
 using Sharpie;
 
-namespace RogueConsole.World.Maps;
+namespace Vimonia.World.Maps;
 
 public class SpawnRoom(Canvas canvas) : TileMap(canvas)
 {

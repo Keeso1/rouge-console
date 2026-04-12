@@ -1,4 +1,4 @@
-namespace RogueConsole.Enums;
+namespace Vimonia.Enums;
 
 public enum GamePhase
 {

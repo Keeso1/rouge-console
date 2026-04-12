@@ -1,12 +1,12 @@
 using System.Drawing;
 using Microsoft.Extensions.Logging;
-using RogueConsole.Assets;
-using RogueConsole.Enums;
-using RogueConsole.Utils;
-using RogueConsole.World;
+using Vimonia.Assets;
+using Vimonia.Enums;
+using Vimonia.Utils;
+using Vimonia.World;
 using Sharpie;
 
-namespace RogueConsole.Core;
+namespace Vimonia.Core;
 
 public sealed class GameState(Style playerBody, MapGen floor)
 {

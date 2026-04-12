@@ -1,8 +1,8 @@
-using RogueConsole.Entities;
-using RogueConsole.Assets;
+using Vimonia.Entities;
+using Vimonia.Assets;
 using System.Text;
 
-namespace RogueConsole.World;
+namespace Vimonia.World;
 
 
 public class Tile

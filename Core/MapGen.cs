@@ -2,12 +2,12 @@ using System.Drawing;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using RogueConsole.Enums;
-using RogueConsole.Utils;
-using RogueConsole.World;
+using Vimonia.Enums;
+using Vimonia.Utils;
+using Vimonia.World;
 using Sharpie;
 
-namespace RogueConsole.Core;
+namespace Vimonia.Core;
 
 public class MapGen
 {

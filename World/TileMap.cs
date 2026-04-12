@@ -1,12 +1,12 @@
 using System.Drawing;
 using Microsoft.Extensions.Logging;
-using RogueConsole.Core;
-using RogueConsole.Enums;
-using RogueConsole.Utils;
-using RogueConsole.World.Maps;
+using Vimonia.Core;
+using Vimonia.Enums;
+using Vimonia.Utils;
+using Vimonia.World.Maps;
 using Sharpie;
 
-namespace RogueConsole.World;
+namespace Vimonia.World;
 
 public class TileMap
 {

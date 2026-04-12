@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace RogueConsole.Assets;
+namespace Vimonia.Assets;
 
 public static class GameConstants
 {

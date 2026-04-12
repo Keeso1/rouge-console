@@ -1,6 +1,6 @@
 using Sharpie;
 
-namespace RogueConsole.Utils;
+namespace Vimonia.Utils;
 
 public static class GetCanvasCoords
 {
