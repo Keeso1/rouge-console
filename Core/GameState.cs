@@ -2,16 +2,20 @@ using System.Drawing;
 using Microsoft.Extensions.Logging;
 using RogueConsole.Assets;
 using RogueConsole.Enums;
+using RogueConsole.Utils;
+using RogueConsole.World;
 using Sharpie;
 
 namespace RogueConsole.Core;
 
-public sealed class GameState(Style playerBody, MapGen mapGen)
+public sealed class GameState(Style playerBody, MapGen floor)
 {
     public static event EventHandler<GamePhase> CurrentState;
     public static event Action? OnTick;
 
-    public static Point PrevPosition { get; set; }
+	public required TileMap CurrentRoom {get; set;}
+
+    public Point PrevPosition { get; set; }
     public required Canvas Canvas { get; set; }
 
     public void Update(Direction? direction)
@@ -36,8 +40,26 @@ public sealed class GameState(Style playerBody, MapGen mapGen)
             },
             _ => PrevPosition,
         };
+		
+		if (CurrentRoom.Tiles[position.X, position.Y] == Tile.Door)
+		{
+			var (roomX, roomY) = CurrentRoom.GetCoordsInFloor(floor);
+			if ((roomX, roomY) == (-1, -1))
+			{
+				throw new Exception("Current room has no coords");
+			}
+	   
+			CurrentRoom = (position.X, position.Y) switch
+			{
+				var p when p == GetCanvasCoords.GetCanvasTopCenter(Canvas)    => floor.Rooms[roomX, roomY - 1], // North
+				var p when p == GetCanvasCoords.GetCanvasBottomCenter(Canvas) => floor.Rooms[roomX, roomY + 1], // South
+				var p when p == GetCanvasCoords.GetCanvasLeftCenter(Canvas)   => floor.Rooms[roomX - 1, roomY], // West
+				var p when p == GetCanvasCoords.GetCanvasRightCenter(Canvas)  => floor.Rooms[roomX + 1, roomY], // East
+				_ => throw new Exception("Position is somehow not at the door")
+			};
+		};
 
-        mapGen.Rooms[8, 8].RenderToCanvas();
+        CurrentRoom.RenderToCanvas();
         Canvas.Glyph(position, GameConstants.Player, playerBody);
         PrevPosition = position;
     }

@@ -40,7 +40,7 @@ public abstract class Entity
     {
         if (_tickCount % 2 == 0)
         {
-            _playerPos = GameState.PrevPosition;
+            _playerPos = new(2,2); //TODO: FIX THIS
 
         }
     }

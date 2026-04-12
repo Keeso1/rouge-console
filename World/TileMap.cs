@@ -1,5 +1,6 @@
 using System.Drawing;
 using Microsoft.Extensions.Logging;
+using RogueConsole.Core;
 using RogueConsole.Enums;
 using RogueConsole.Utils;
 using RogueConsole.World.Maps;
@@ -123,4 +124,18 @@ public class TileMap
             RoomTypes.Boss => new BossRoom(canvas),
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, "Unsupported room type"),
         };
+
+		public (int x, int y) GetCoordsInFloor(MapGen floor)
+		{
+			(int X, int Y) coord = (-1,-1); //TODO: Fix hardcoded value
+			for (int x = 0; x < floor.Rooms.GetLength(0); x++){
+				for (int y = 0; y < floor.Rooms.GetLength(1); y++){
+					if (floor.Rooms[x, y] == this){
+						coord = (x,y);
+						break;
+					}
+				}
+			}
+			return coord;
+		}
 }

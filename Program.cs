@@ -49,9 +49,10 @@ var game = new GameState(
 )
 {
     Canvas = canvas,
+	PrevPosition = new(canvas.Size.Width / 2, canvas.Size.Height / 2),
+	CurrentRoom = floor.Rooms[settings.NumberOfRooms +1, settings.NumberOfRooms +1]
 };
 
-GameState.PrevPosition = new(terminal.Screen.Size.Width / 2, terminal.Screen.Size.Height / 2);
 
 terminal.Repeat(
     t =>
