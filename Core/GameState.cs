@@ -41,8 +41,6 @@ public sealed class GameState(Style playerBody, MapGen floor, ILogger logger)
             _ => PrevPosition,
         };
 
-        logger.LogInformation("activeNeighs {neg}", CurrentRoom.Neighbors);
-		logger.LogInformation("CurrentRoom.Tiles[posx, posy] = {tile}", CurrentRoom.Tiles[position.X, position.Y].Glyph == GameConstants.Door);
 		if (CurrentRoom.Tiles[position.X, position.Y].Glyph == GameConstants.Door) // Check if tile is door
 		{
 			position = EnterNewRoom(position);
