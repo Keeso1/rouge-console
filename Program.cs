@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using Microsoft.Extensions.Logging;
 using Vimonia.Core;
 using Vimonia.Enums;
@@ -13,8 +13,7 @@ using StreamWriter logFileWriter = new StreamWriter(logFilePath, append: true);
 GameSettings settings = new() { NumberOfRooms = 7 }; //grid size 16x16, no way to overshoot index
 
 //Create an ILoggerFactory
-ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
-{
+ILoggerFactory loggerFactory = LoggerFactory.Create(builder => {
     //Add console output
     // builder.AddSimpleConsole(options =>
     // {
@@ -38,28 +37,26 @@ var terminal = new Terminal(
 var subWindow = terminal.Screen.Window(new(1, 1, terminal.Screen.Size.Width - 2, terminal.Screen.Size.Height - 2));
 
 Canvas canvas = new(subWindow.Size);
+Rng.Init(canvas);
 
 MapGen floor = new(logger, canvas, settings);
 
 var game = new GameState(
-    new()
-    {
+    new() {
         Attributes = VideoAttribute.Bold,
         ColorMixture = terminal.Colors.MixColors(StandardColor.Magenta, StandardColor.Black),
     },
     floor,
-	logger
-)
-{
+    logger
+) {
     Canvas = canvas,
-	PrevPosition = new(canvas.Size.Width / 2, canvas.Size.Height / 2),
-	CurrentRoom = floor.Rooms[settings.NumberOfRooms +1, settings.NumberOfRooms +1]
+    PrevPosition = new(canvas.Size.Width / 2, canvas.Size.Height / 2),
+    CurrentRoom = floor.Rooms[settings.NumberOfRooms + 1, settings.NumberOfRooms + 1]
 };
 
 
 terminal.Repeat(
-    t =>
-    {
+    t => {
         game.Canvas.DrawOnto(
             t.Screen,
             new Rectangle(new Point(0, 0), canvas.Size),
@@ -73,10 +70,8 @@ terminal.Repeat(
 );
 
 terminal.Run(
-    (Term, Tevent) =>
-    {
-        switch (Tevent)
-        {
+    (Term, Tevent) => {
+        switch (Tevent) {
             case KeyEvent { Char.Value: 'q' }:
                 Environment.Exit(0);
                 break;
@@ -99,46 +94,38 @@ terminal.Run(
 );
 
 // Customized ILoggerProvider, writes logs to text files
-public class CustomFileLoggerProvider : ILoggerProvider
-{
+public class CustomFileLoggerProvider : ILoggerProvider {
     private readonly StreamWriter _logFileWriter;
 
-    public CustomFileLoggerProvider(StreamWriter logFileWriter)
-    {
+    public CustomFileLoggerProvider(StreamWriter logFileWriter) {
         _logFileWriter = logFileWriter ?? throw new ArgumentNullException(nameof(logFileWriter));
     }
 
-    public ILogger CreateLogger(string categoryName)
-    {
+    public ILogger CreateLogger(string categoryName) {
         return new CustomFileLogger(categoryName, _logFileWriter);
     }
 
-    public void Dispose()
-    {
+    public void Dispose() {
         _logFileWriter.Dispose();
     }
 }
 
 // Customized ILogger, writes logs to text files
-public class CustomFileLogger : ILogger
-{
+public class CustomFileLogger : ILogger {
     private readonly string _categoryName;
     private readonly StreamWriter _logFileWriter;
 
-    public CustomFileLogger(string categoryName, StreamWriter logFileWriter)
-    {
+    public CustomFileLogger(string categoryName, StreamWriter logFileWriter) {
         _categoryName = categoryName;
         _logFileWriter = logFileWriter;
     }
 
     public IDisposable? BeginScope<TState>(TState state)
-        where TState : notnull
-    {
+        where TState : notnull {
         return null;
     }
 
-    public bool IsEnabled(LogLevel logLevel)
-    {
+    public bool IsEnabled(LogLevel logLevel) {
         // Ensure that only information level and higher logs are recorded
         return logLevel is not LogLevel.None && logLevel >= LogLevel.Information;
     }
@@ -149,11 +136,9 @@ public class CustomFileLogger : ILogger
         TState state,
         Exception? exception,
         Func<TState, Exception?, string> formatter
-    )
-    {
+    ) {
         // Ensure that only information level and higher logs are recorded
-        if (!IsEnabled(logLevel))
-        {
+        if (!IsEnabled(logLevel)) {
             return;
         }
 
@@ -162,8 +147,7 @@ public class CustomFileLogger : ILogger
 
         //Write log messages to text file
         _logFileWriter.WriteLine($"[{logLevel}] [{_categoryName}] {message}");
-        if (exception is not null)
-        {
+        if (exception is not null) {
             _logFileWriter.WriteLine(exception);
         }
         _logFileWriter.Flush();

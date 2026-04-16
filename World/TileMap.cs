@@ -13,11 +13,9 @@ public class TileMap {
     public Canvas Canvas { get; init; }
     public RoomTypes RoomType { get; set; }
     public List<Cardinals> Neighbors { get; set; }
-    protected RockGen RockGen;
 
     public TileMap(Canvas canvas) {
         Canvas = canvas;
-        RockGen = new() { Canvas = canvas };
     }
 
     public Tile Get(int x, int y) => Tiles[x, y];
@@ -54,7 +52,7 @@ public class TileMap {
 
     protected IEnumerable<(int, int)> GenRocks() {
         for (int i = 0; i < GameSettings.MaximumRocks; i++) {
-            yield return RockGen.GetRock();
+            yield return Rng.GetRandomFromCanvas();
         }
     }
 
@@ -78,7 +76,6 @@ public class TileMap {
                 default:
                     throw new Exception("Neighbor must have a cardinal direction");
             }
-            ;
         }
     }
 
