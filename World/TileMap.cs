@@ -13,9 +13,11 @@ public class TileMap {
     public Canvas Canvas { get; init; }
     public RoomTypes RoomType { get; set; }
     public List<Cardinals> Neighbors { get; set; }
+    protected RockGen RockGen;
 
     public TileMap(Canvas canvas) {
         Canvas = canvas;
+        RockGen = new() { Canvas = canvas };
     }
 
     public Tile Get(int x, int y) => Tiles[x, y];
@@ -50,6 +52,12 @@ public class TileMap {
         }
     }
 
+    protected IEnumerable<(int, int)> GenRocks() {
+        for (int i = 0; i < GameSettings.MaximumRocks; i++) {
+            yield return RockGen.GetRock();
+        }
+    }
+
     public void RenderDoors() {
         foreach (Cardinals neighbor in Neighbors) {
             switch (neighbor) {
@@ -77,6 +85,7 @@ public class TileMap {
     public virtual void InitMap() {
         Tiles = new Tile[Canvas.Size.Width, Canvas.Size.Height];
         Fill();
+        Set(GenRocks(), Tile.Rock);
         Set(GetCanvasCoords.GetVerticalLine(0, 0, Canvas.Size.Height), Tile.Wall);
         Set(
             GetCanvasCoords.GetVerticalLine(Canvas.Size.Width - 1, 0, Canvas.Size.Height),
