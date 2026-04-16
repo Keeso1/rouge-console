@@ -20,5 +20,5 @@ public class RockGen {
         }
     }
 
-    private (int, int) GetRandomFromCanvas() => (_rand.Next(0, Canvas.Size.Width), _rand.Next(0, Canvas.Size.Height));
+    private (int, int) GetRandomFromCanvas() => (_rand.Next(1, Canvas.Size.Width - 1), _rand.Next(1, Canvas.Size.Height - 1));
 }
