@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Vimonia.Core;
 
-public sealed class GameState(Style playerBody, MapGen floor, ILogger logger, GameSettings settings)
+public sealed class GameState(Style playerBody, MapGen floor, ILogger logger, GameSettings settings, Terminal terminal)
 {
     public static event EventHandler<GamePhase> CurrentState;
     public static event Action? OnTick;
@@ -56,7 +56,7 @@ public sealed class GameState(Style playerBody, MapGen floor, ILogger logger, Ga
         PrevPosition = position;
 		
 		Rune[,] map = CanvasHelpers.RoomsToString(logger, settings, floor.Rooms, CurrentRoom);
-		CanvasHelpers.RenderToMap(logger, MinimapCanvas, map);
+		CanvasHelpers.RenderToMap(logger, MinimapCanvas, map, terminal);
     }
 
 

@@ -2,19 +2,36 @@ using System.Drawing;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using Sharpie;
+using Vimonia.Enums;
 using Vimonia.World;
 
 public static class CanvasHelpers
 {
 
-	public static void RenderToMap(ILogger logger, Canvas canvas, Rune[,] Tiles)
+	public static void RenderToMap(ILogger logger, Canvas canvas, Rune[,] Tiles, Terminal terminal)
 	{
-		for (int w = 0; w < canvas.Size.Width; w++)
+		int width = Tiles.GetLength(0);
+		int height = Tiles.GetLength(1);
+
+		for (int w = 0; w < width; w++)
 		{
-			for (int h = 0; h < canvas.Size.Height; h++)
+			for (int h = 0; h < height; h++)
 			{
-				logger.LogInformation("w {w} \n h {h}", w, h); //TODO Fortsätt här
-				canvas.Glyph(new Point(w, h), Tiles[w, h], Style.Default);
+				if (w < canvas.Size.Width && h < canvas.Size.Height)
+				{
+
+					if(Rune.IsUpper(Tiles[w,h])){
+
+						canvas.Glyph(new Point(w, h), Tiles[w, h], new Style(){
+								Attributes = VideoAttribute.Bold,
+								ColorMixture = terminal.Colors.MixColors(StandardColor.Magenta, StandardColor.Black),
+								});
+					}else {
+
+						canvas.Glyph(new Point(w, h), Tiles[w, h], Style.Default);
+					}
+
+				}
 			}
 		}
 	}
@@ -28,11 +45,24 @@ public static class CanvasHelpers
             {
                 if (Rooms[x, y] != null)
                 {
-                    map[x, y] = new Rune(Convert.ToInt32(Rooms[x, y].RoomType)); //dafuq
+					char roomType = Rooms[x,y].RoomType switch{
+						RoomTypes.Spawn => 's',
+						RoomTypes.Item => 'i',
+						RoomTypes.Boss => 'b',
+						RoomTypes.Normal => 'n',
+						_=> ' '
+					};
+
+					if(Rooms[x,y] == currentRoom){
+						logger.LogInformation("is currentRoom");
+						roomType = 'C';
+					}
+
+                    map[x, y] = new Rune(roomType); //dafuq
                 }
                 else
                 {
-                    map[x,y] = new Rune(0);
+                    map[x,y] = new Rune(' ');
                 }
             }
         }

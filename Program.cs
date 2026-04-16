@@ -68,7 +68,8 @@ var game = new GameState(
     },
     floor,
 	logger,
-	settings
+	settings,
+	terminal
 )
 {
     Canvas = canvas,
@@ -78,6 +79,8 @@ var game = new GameState(
 };
 
 
+
+game.Update(null);
 
 terminal.Repeat(
     t =>
@@ -89,7 +92,7 @@ terminal.Repeat(
 		);
 
 		// MINIMAP
-		game.Canvas.DrawOnto(
+		game.MinimapCanvas.DrawOnto(
 			subWindow,
 			new Rectangle(new Point(0, 0), minimapCanvas.Size),
 			new Point(0, 0)
