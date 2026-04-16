@@ -35,7 +35,7 @@ var terminal = new Terminal(
 );
 
 
-var window = terminal.Screen.Window(new(1, 1, terminal.Screen.Size.Width - 2, terminal.Screen.Size.Height));
+var window = terminal.Screen.Window(new(1, 1, terminal.Screen.Size.Width - 2, terminal.Screen.Size.Height - 2));
 
 //MINIMAP TESTING
 var subWindow = terminal.Screen.Window(new(1, 1, terminal.Screen.Size.Width / 2, terminal.Screen.Size.Height / 2));
@@ -56,7 +56,6 @@ subWindow.Background = (new(' '),
 
 Canvas canvas = new(window.Size);
 Canvas minimapCanvas = new(subWindow.Size);
-Canvas canvas = new(subWindow.Size);
 Rng.Init(canvas);
 
 MapGen floor = new(logger, canvas, settings);
@@ -125,8 +124,11 @@ terminal.Run(
                 break;
 			case KeyEvent { Char.Value: 'm'}:
 				subWindow.Visible = !subWindow.Visible; //Toggle window
-				window.SendToBack();
-				subWindow.BringToFront();
+                if (subWindow.Visible)
+            	{
+            		window.SendToBack();
+            		subWindow.BringToFront();
+            	}
 				break;
         }
         ;
