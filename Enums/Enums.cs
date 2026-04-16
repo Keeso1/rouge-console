@@ -1,22 +1,19 @@
 namespace Vimonia.Enums;
 
-public enum GamePhase
-{
+public enum GamePhase {
     Running,
     GameOver,
     Victory,
 }
 
-public enum Direction
-{
+public enum Direction {
     Down,
     Up,
     Left,
     Right,
 }
 
-public enum Cardinals
-{
+public enum Cardinals {
     North,
     West,
     East,
@@ -24,14 +21,12 @@ public enum Cardinals
     Unknown,
 }
 
-public enum EntityType
-{
+public enum EntityType {
     Player,
     Enemy,
 }
 
-public enum RoomTypes
-{
+public enum RoomTypes {
     Spawn = 1,
     Item = 2,
     Boss = 3,

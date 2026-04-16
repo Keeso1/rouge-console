@@ -5,10 +5,8 @@ using Sharpie;
 
 namespace Vimonia.World.Maps;
 
-public class ItemRoom(Canvas canvas) : TileMap(canvas)
-{
-    public override void InitMap()
-    {
+public class ItemRoom(Canvas canvas) : TileMap(canvas) {
+    public override void InitMap() {
         base.InitMap();
         RoomType = RoomTypes.Item;
         Set(GetCanvasCoords.GetCanvasCenter(canvas)

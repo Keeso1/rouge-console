@@ -9,15 +9,13 @@ using Sharpie;
 
 namespace Vimonia.Core;
 
-public class MapGen
-{
+public class MapGen {
     public TileMap[,] Rooms { get; private set; }
     private readonly ILogger _logger;
     private GameSettings Settings { get; set; }
     private Size Size { get; set; }
 
-    public MapGen(ILogger Logger, Canvas canvas, GameSettings settings)
-    {
+    public MapGen(ILogger Logger, Canvas canvas, GameSettings settings) {
         Settings = settings;
         Rooms = new TileMap[(Settings.NumberOfRooms + 1) * 2, (Settings.NumberOfRooms + 1) * 2];
         _logger = Logger;
@@ -28,41 +26,34 @@ public class MapGen
         Rooms[Settings.NumberOfRooms + 1, Settings.NumberOfRooms + 1].InitMap();
         Size = new(Rooms.GetLength(0), Rooms.GetLength(1));
 
-        for (var room = 0; room < Settings.NumberOfRooms; room++)
-        {
+        for (var room = 0; room < Settings.NumberOfRooms; room++) {
             Generate(canvas);
         } // Generate layout
 
         GenerateBossRoom(_logger, canvas); // Add bossroom at furthest x value
         GenerateItemRoom(_logger, canvas);
         SetDoors();
-        foreach (var (x, y) in GetNonEmptyRooms())
-        {
+        foreach (var (x, y) in GetNonEmptyRooms()) {
             Rooms[x, y].InitMap();
         }
     }
 
-    private void GenerateItemRoom(ILogger logger, Canvas canvas)
-    {
+    private void GenerateItemRoom(ILogger logger, Canvas canvas) {
         List<(int x, int y)> activeRooms = [];
 
-        for (int x = 0; x < Rooms.GetLength(0); x++)
-        {
-            for (int y = 0; y < Rooms.GetLength(1); y++)
-            {
+        for (int x = 0; x < Rooms.GetLength(0); x++) {
+            for (int y = 0; y < Rooms.GetLength(1); y++) {
                 if (
                     Rooms[x, y] != null
                     && Rooms[x, y].RoomType != RoomTypes.Boss
                     && Rooms[x, y].RoomType != RoomTypes.Spawn
-                )
-                {
+                ) {
                     activeRooms.Add((x, y));
                 }
             }
         }
 
-        if (activeRooms.Count == 0)
-        {
+        if (activeRooms.Count == 0) {
             throw new Exception(
                 "Can't generate itemroom because there are no eligible rooms to select from."
             );
@@ -75,24 +66,19 @@ public class MapGen
         Rooms[randRoom.x, randRoom.y].InitMap();
     }
 
-    private void GenerateBossRoom(ILogger _logger, Canvas canvas)
-    {
+    private void GenerateBossRoom(ILogger _logger, Canvas canvas) {
         (int x, int y) = BFS.Execute(Rooms, Settings); //Breadth-first-search
         Rooms[x, y] = TileMap.GetRoom(RoomTypes.Boss, canvas);
         Rooms[x, y].InitMap();
     }
 
-    public void SetDoors()
-    {
+    public void SetDoors() {
         List<(int x, int y)> activeRooms = GetNonEmptyRooms();
-        foreach (var room in activeRooms)
-        {
+        foreach (var room in activeRooms) {
             List<Cardinals> activeNeighbors = [];
 
-            foreach (var neighbor in room.GetCardinalNeighbours())
-            {
-                if (neighbor.InBounds(Size) && Rooms[neighbor.x, neighbor.y] != null)
-                {
+            foreach (var neighbor in room.GetCardinalNeighbours()) {
+                if (neighbor.InBounds(Size) && Rooms[neighbor.x, neighbor.y] != null) {
                     activeNeighbors.Add((neighbor.x - room.x, neighbor.y - room.y).ToCardinal());
                 }
             }
@@ -104,17 +90,12 @@ public class MapGen
     public static string RoomsToString(TileMap[,] Rooms, TileMap currentRoom) //Helper func to see the grid in a clean way
     {
         var sb = new StringBuilder();
-        for (int y = 0; y < Rooms.GetLength(1); y++)
-        {
-            for (int x = 0; x < Rooms.GetLength(0); x++)
-            {
-                if (Rooms[x, y] != null)
-                {
+        for (int y = 0; y < Rooms.GetLength(1); y++) {
+            for (int x = 0; x < Rooms.GetLength(0); x++) {
+                if (Rooms[x, y] != null) {
                     sb.Append(Convert.ToInt32(Rooms[x, y].RoomType)); //dafuq
                     sb.Append(' ');
-                }
-                else
-                {
+                } else {
                     sb.Append("0");
                     sb.Append(' ');
                 }
@@ -124,15 +105,11 @@ public class MapGen
         return sb.ToString();
     }
 
-    public List<(int x, int y)> GetNonEmptyRooms()
-    {
+    public List<(int x, int y)> GetNonEmptyRooms() {
         List<(int, int)> activeRooms = new();
-        for (int x = 0; x < Rooms.GetLength(0); x++)
-        {
-            for (int y = 0; y < Rooms.GetLength(1); y++)
-            {
-                if (Rooms[x, y] != null)
-                {
+        for (int x = 0; x < Rooms.GetLength(0); x++) {
+            for (int y = 0; y < Rooms.GetLength(1); y++) {
+                if (Rooms[x, y] != null) {
                     (int, int) tempTpl = (x, y);
                     activeRooms.Add(tempTpl);
                 }
@@ -142,21 +119,18 @@ public class MapGen
         return activeRooms;
     }
 
-    public void Generate(Canvas canvas)
-    {
+    public void Generate(Canvas canvas) {
         var rand = new Random();
         List<(int, int)> activeRooms = GetNonEmptyRooms();
         _logger.LogInformation("active rooms count {ac}", activeRooms.Count);
 
         // Retry until we find an expandable room or run out of candidates
-        while (activeRooms.Count > 0)
-        {
+        while (activeRooms.Count > 0) {
             var selIdx = rand.Next(activeRooms.Count);
             (int, int) selRoom = activeRooms[selIdx];
             var checkedRooms = CheckRooms(selRoom);
             _logger.LogInformation("checkedRooms: {chrooms}", checkedRooms);
-            if (checkedRooms.Count > 0)
-            {
+            if (checkedRooms.Count > 0) {
                 // Successfully found an expandable room
                 var r = rand.Next(checkedRooms.Count);
                 var randomRoom = checkedRooms[r];
@@ -167,9 +141,7 @@ public class MapGen
 
                 Rooms[randomRoom.Item1, randomRoom.Item2].InitMap();
                 break;
-            }
-            else
-            {
+            } else {
                 // This room cannot expand, remove it from candidates
                 _logger.LogInformation("removing Room at {index}", selIdx);
                 activeRooms.RemoveAt(selIdx);
@@ -177,8 +149,7 @@ public class MapGen
         }
     }
 
-    public List<(int, int)> CheckRooms((int, int) room)
-    {
+    public List<(int, int)> CheckRooms((int, int) room) {
         return room.GetCardinalNeighbours()
             .Where(r => r.InBounds(Size) && Rooms[r.x, r.y] == null)
             .ToList();

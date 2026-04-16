@@ -5,8 +5,8 @@ using Vimonia.Enums;
 namespace Vimonia.Entities;
 
 
-public abstract class Entity
-{
+public abstract class Entity {
+
     public EntityType Type { get; init; }
     public int Health { get; set; }
     public int MaxHealth { get; set; }
@@ -15,8 +15,7 @@ public abstract class Entity
     private int _tickCount = 0;
     protected Point _playerPos = new(0, 0);
 
-    protected Entity(int health, int maxhealth, EntityType type)
-    {
+    protected Entity(int health, int maxhealth, EntityType type) {
         Health = health;
         MaxHealth = maxhealth;
         Type = type;
@@ -26,30 +25,24 @@ public abstract class Entity
 
     }
 
-    protected virtual void Update()
-    {
+    protected virtual void Update() {
         _tickCount++;
-        if (IsDead)
-        {
+        if (IsDead) {
             GameState.OnTick -= Update;
             GameState.CurrentState -= CheckState;
         }
     }
 
-    protected void CheckPlayer()
-    {
-        if (_tickCount % 2 == 0)
-        {
-            _playerPos = new(2,2); //TODO: FIX THIS
+    protected void CheckPlayer() {
+        if (_tickCount % 2 == 0) {
+            _playerPos = new(2, 2); //TODO: FIX THIS
 
         }
     }
 
-    protected void CheckState(object? sender, GamePhase phase)
-    {
+    protected void CheckState(object? sender, GamePhase phase) {
         if (phase is GamePhase.Running) return;
-        if (phase is GamePhase.GameOver || phase is GamePhase.Victory)
-        {
+        if (phase is GamePhase.GameOver || phase is GamePhase.Victory) {
             GameState.OnTick -= Update;
             GameState.CurrentState -= CheckState;
         }
@@ -57,8 +50,4 @@ public abstract class Entity
     }
 }
 
-public enum EntityType
-{
-    Player,
-    Enemy
-}
+

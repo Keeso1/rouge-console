@@ -1,14 +1,12 @@
 using Vimonia.World;
 
-static class BFS
-{
-    private class QuePair
-    {
+static class BFS {
+
+    private class QuePair {
         public int first,
             second;
 
-        public QuePair(int first, int second)
-        {
+        public QuePair(int first, int second) {
             this.first = first;
             this.second = second;
         }
@@ -24,14 +22,12 @@ static class BFS
 
     // Function to check if a cell
     // is be visited or not
-    static bool isValid(TileMap[,] Rooms, bool[,] vis, int row, int col)
-    {
+    static bool isValid(TileMap[,] Rooms, bool[,] vis, int row, int col) {
         // If cell lies out of bounds
         if (row < 0 || col < 0 || row >= ROW || col >= COL)
             return false;
 
-        if (Rooms[row, col] == null)
-        {
+        if (Rooms[row, col] == null) {
             return false;
         }
 
@@ -44,8 +40,7 @@ static class BFS
     }
 
     // Function to perform the BFS traversal
-    static (int x, int y) Search(TileMap[,] grid, bool[,] vis, int row, int col)
-    {
+    static (int x, int y) Search(TileMap[,] grid, bool[,] vis, int row, int col) {
         // Stores indices of the matrix cells
         Queue<QuePair> q = new Queue<QuePair>();
 
@@ -57,19 +52,16 @@ static class BFS
         var lastRoom = (row, col); //TODO: Make sure it selects the room with most hops from spawn
         // Iterate while the queue
         // is not empty
-        while (q.Count != 0)
-        {
+        while (q.Count != 0) {
             QuePair cell = q.Peek();
             int x = cell.first;
             int y = cell.second;
             q.Dequeue();
             // Go to the adjacent cells
-            for (int i = 0; i < 4; i++)
-            {
+            for (int i = 0; i < 4; i++) {
                 int adjx = x + dRow[i];
                 int adjy = y + dCol[i];
-                if (isValid(grid, vis, adjx, adjy))
-                {
+                if (isValid(grid, vis, adjx, adjy)) {
                     q.Enqueue(new QuePair(adjx, adjy));
                     vis[adjx, adjy] = true;
                     lastRoom = (adjx, adjy);
@@ -80,8 +72,7 @@ static class BFS
     }
 
     // Driver Code
-    public static (int x, int y) Execute(TileMap[,] Rooms, GameSettings settings)
-    {
+    public static (int x, int y) Execute(TileMap[,] Rooms, GameSettings settings) {
         // Declare the visited array
         bool[,] vis = new bool[ROW, COL];
         return Search(Rooms, vis, settings.NumberOfRooms + 1, settings.NumberOfRooms + 1);

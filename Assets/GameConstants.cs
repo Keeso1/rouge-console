@@ -2,8 +2,8 @@ using System.Text;
 
 namespace Vimonia.Assets;
 
-public static class GameConstants
-{
+public static class GameConstants {
+
     public static readonly Rune Player = new('☻');
     public static readonly Rune Enemy = new('☹');
     public static readonly Rune Ground = new('░');
@@ -12,4 +12,5 @@ public static class GameConstants
     public static readonly Rune Space = new(' ');
     public static readonly Rune Item = new('▭');
     public static readonly Rune Door = new(' ');
+    public static readonly Rune Rock = new('#');
 }

@@ -1,3 +1,3 @@
-public interface IOpenable{
-	void Open();
+public interface IOpenable {
+    void Open();
 }
