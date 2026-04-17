@@ -20,17 +20,17 @@ public abstract class Entity {
         MaxHealth = maxhealth;
         Type = type;
 
-        GameState.OnTick += Update;
+        GameState.PlayerInput += Update;
         GameState.CurrentState += CheckState;
 
     }
 
-    protected virtual void Update() {
+    protected virtual void Update(object sender, Point playerPos) {
         _tickCount++;
         if (IsDead) {
-            GameState.OnTick -= Update;
             GameState.CurrentState -= CheckState;
         }
+
     }
 
     protected void CheckPlayer() {
