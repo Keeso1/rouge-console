@@ -17,7 +17,7 @@ public abstract class Entity {
     private int _tickCount = 0;
     protected Point _playerPos = new(0, 0);
 
-    protected Entity(int health, int maxhealth, EntityType type) {
+    protected Entity(int health, int maxhealth, EntityType type, ILogger logger) {
         Health = health;
         MaxHealth = maxhealth;
         Type = type;
@@ -35,17 +35,22 @@ public abstract class Entity {
             GameState.CurrentState -= CheckState;
         }
 
-    }
+        _playerPos = playerPos;
 
         _logger.LogInformation("EVENT: player pos: {pos}", _playerPos);
 
-        }
     }
+
+    // protected void CheckPlayer() {
+    //     if (_tickCount % 2 == 0) {
+    //         _playerPos = new(2, 2); //TODO: FIX THIS
+    //
+    //     }
+    // }
 
     protected void CheckState(object? sender, GamePhase phase) {
         if (phase is GamePhase.Running) return;
         if (phase is GamePhase.GameOver || phase is GamePhase.Victory) {
-            GameState.OnTick -= Update;
             GameState.CurrentState -= CheckState;
         }
 

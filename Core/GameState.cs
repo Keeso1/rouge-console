@@ -58,7 +58,7 @@ public sealed class GameState(Style playerBody, MapGen floor, ILogger logger, Ga
 		Rune[,] map = CanvasHelpers.RoomsToString(logger, settings, floor.Rooms, CurrentRoom);
 		CanvasHelpers.RenderToMap(logger, MinimapCanvas, map, terminal);
 
-        PlayerInput.Invoke(this, PrevPosition);
+        PlayerInput?.Invoke(this, PrevPosition);
     }
 
     public Point EnterNewRoom(Point position) {
