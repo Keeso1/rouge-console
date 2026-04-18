@@ -6,22 +6,27 @@ namespace Vimonia.Utils;
 
 public static class Log {
 
-    private static StreamWriter _file;
+    private static StreamWriter? _file;
+    private static readonly Lock _sync = new();
 
     public static void Init(string filePath) {
+        _file?.Dispose();
         _file = new StreamWriter(filePath, append: true) { AutoFlush = true };
     }
 
     private static StreamWriter File => _file ?? throw new InvalidOperationException($"Logger not initialized");
 
+
     private static void Write(string level, string member, string file, int line, string msg, Exception? ex = null) {
-        if (ex != null) {
-
-            File.WriteLine($"{DateTime.Now:HH:mm:ss} [{level}: {ex}] [{Path.GetFileName(file)}:{line} {member}] {msg}");
-            return;
+        var prefix = $"{DateTime.Now:HH:mm:ss} [{level}] [{Path.GetFileName(file)}:{line} {member}] {msg}";
+        lock (_sync) {
+            if (ex != null) {
+                File.WriteLine(prefix);
+                File.WriteLine(ex);
+            } else {
+                File.WriteLine(prefix);
+            }
         }
-
-        File.WriteLine($"{DateTime.Now:HH:mm:ss} [{level}] [{Path.GetFileName(file)}:{line} {member}] {msg}");
     }
 
     public static void Info(string msg,
