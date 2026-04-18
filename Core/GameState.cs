@@ -8,7 +8,7 @@ using Sharpie;
 
 namespace Vimonia.Core;
 
-public sealed class GameState(Style playerBody, MapGen floor, ILogger logger) {
+public sealed class GameState(Style playerBody, MapGen floor) {
     public static event EventHandler<GamePhase> CurrentState;
     public static event Action? OnTick;
 
