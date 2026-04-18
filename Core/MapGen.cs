@@ -83,8 +83,8 @@ public class MapGen {
         }
     }
 
-    //Helper func to see the grid in a clean way
-    public static string RoomsToString(TileMap[,] Rooms) {
+    public static string RoomsToString(TileMap[,] Rooms, TileMap currentRoom) //Helper func to see the grid in a clean way
+    {
         var sb = new StringBuilder();
         for (int y = 0; y < Rooms.GetLength(1); y++) {
             for (int x = 0; x < Rooms.GetLength(0); x++) {
