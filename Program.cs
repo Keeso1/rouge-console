@@ -2,32 +2,14 @@ using System.Drawing;
 using Microsoft.Extensions.Logging;
 using Vimonia.Core;
 using Vimonia.Enums;
+using Vimonia.Utils;
 using Sharpie;
 using Sharpie.Backend;
 
-//Define the path to the text file
 string logFilePath = "console_log.txt";
+Log.Init(logFilePath);
 
-//Create a StreamWriter to write logs to a text file
-using StreamWriter logFileWriter = new StreamWriter(logFilePath, append: true);
 GameSettings settings = new() { NumberOfRooms = 7 }; //grid size 16x16, no way to overshoot index
-
-//Create an ILoggerFactory
-ILoggerFactory loggerFactory = LoggerFactory.Create(builder => {
-    //Add console output
-    // builder.AddSimpleConsole(options =>
-    // {
-    //     options.IncludeScopes = true;
-    //     options.SingleLine = true;
-    //     options.TimestampFormat = "HH:mm:ss ";
-    // });
-
-    //Add a custom log provider to write logs to text files
-    builder.AddProvider(new CustomFileLoggerProvider(logFileWriter));
-});
-
-//Create an ILogger
-ILogger<Program> logger = loggerFactory.CreateLogger<Program>();
 
 var terminal = new Terminal(
     CursesBackend.Load(),
@@ -58,7 +40,7 @@ Canvas canvas = new(window.Size);
 Canvas minimapCanvas = new(subWindow.Size);
 Rng.Init(canvas);
 
-MapGen floor = new(logger, canvas, settings);
+MapGen floor = new(canvas, settings);
 
 var game = new GameState(
     new() {
@@ -66,7 +48,6 @@ var game = new GameState(
         ColorMixture = terminal.Colors.MixColors(StandardColor.Magenta, StandardColor.Black),
     },
     floor,
-	logger,
 	settings,
 	terminal
 )
@@ -108,6 +89,7 @@ terminal.Run(
     (Term, Tevent) => {
         switch (Tevent) {
             case KeyEvent { Char.Value: 'q' }:
+                Log.Shutdown();
                 Environment.Exit(0);
                 break;
             case KeyEvent { Char.Value: 'h' }:
@@ -136,63 +118,3 @@ terminal.Run(
     }
 );
 
-// Customized ILoggerProvider, writes logs to text files
-public class CustomFileLoggerProvider : ILoggerProvider {
-    private readonly StreamWriter _logFileWriter;
-
-    public CustomFileLoggerProvider(StreamWriter logFileWriter) {
-        _logFileWriter = logFileWriter ?? throw new ArgumentNullException(nameof(logFileWriter));
-    }
-
-    public ILogger CreateLogger(string categoryName) {
-        return new CustomFileLogger(categoryName, _logFileWriter);
-    }
-
-    public void Dispose() {
-        _logFileWriter.Dispose();
-    }
-}
-
-// Customized ILogger, writes logs to text files
-public class CustomFileLogger : ILogger {
-    private readonly string _categoryName;
-    private readonly StreamWriter _logFileWriter;
-
-    public CustomFileLogger(string categoryName, StreamWriter logFileWriter) {
-        _categoryName = categoryName;
-        _logFileWriter = logFileWriter;
-    }
-
-    public IDisposable? BeginScope<TState>(TState state)
-        where TState : notnull {
-        return null;
-    }
-
-    public bool IsEnabled(LogLevel logLevel) {
-        // Ensure that only information level and higher logs are recorded
-        return logLevel is not LogLevel.None && logLevel >= LogLevel.Information;
-    }
-
-    public void Log<TState>(
-        LogLevel logLevel,
-        EventId eventId,
-        TState state,
-        Exception? exception,
-        Func<TState, Exception?, string> formatter
-    ) {
-        // Ensure that only information level and higher logs are recorded
-        if (!IsEnabled(logLevel)) {
-            return;
-        }
-
-        // Get the formatted log message
-        var message = formatter(state, exception);
-
-        //Write log messages to text file
-        _logFileWriter.WriteLine($"[{logLevel}] [{_categoryName}] {message}");
-        if (exception is not null) {
-            _logFileWriter.WriteLine(exception);
-        }
-        _logFileWriter.Flush();
-    }
-}

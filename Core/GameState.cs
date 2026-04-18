@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Vimonia.Core;
 
-public sealed class GameState(Style playerBody, MapGen floor, ILogger logger, GameSettings settings, Terminal terminal)
+public sealed class GameState(Style playerBody, MapGen floor, GameSettings settings, Terminal terminal)
 {
     public static event EventHandler<GamePhase> CurrentState;
     public static event Action? OnTick;
