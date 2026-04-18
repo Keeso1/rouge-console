@@ -9,8 +9,7 @@ using System.Text;
 
 namespace Vimonia.Core;
 
-public sealed class GameState(Style playerBody, MapGen floor, GameSettings settings, Terminal terminal)
-{
+public sealed class GameState(Style playerBody, MapGen floor, GameSettings settings, Terminal terminal) {
     public static event EventHandler<GamePhase> CurrentState;
     public static event Action? OnTick;
 
@@ -22,12 +21,9 @@ public sealed class GameState(Style playerBody, MapGen floor, GameSettings setti
     public required Canvas MinimapCanvas { get; set; }
 
 
-    public void Update(Direction? direction)
-    {
-        Point position = direction switch
-        {
-            Direction.Down => PrevPosition with
-            {
+    public void Update(Direction? direction) {
+        Point position = direction switch {
+            Direction.Down => PrevPosition with {
                 Y = Math.Clamp(PrevPosition.Y + 1, 0, Canvas.Size.Height - 1),
             },
             Direction.Up => PrevPosition with {
@@ -51,9 +47,9 @@ public sealed class GameState(Style playerBody, MapGen floor, GameSettings setti
         CurrentRoom.RenderToCanvas();
         Canvas.Glyph(position, GameConstants.Player, playerBody); //Update player position
         PrevPosition = position;
-		
-		Rune[,] map = CanvasHelpers.RoomsToString(logger, settings, floor.Rooms, CurrentRoom);
-		CanvasHelpers.RenderToMap(logger, MinimapCanvas, map, terminal);
+
+        Rune[,] map = CanvasHelpers.RoomsToString(settings, floor.Rooms, CurrentRoom);
+        CanvasHelpers.RenderToMap(MinimapCanvas, map, terminal);
     }
 
     public Point EnterNewRoom(Point position) {
