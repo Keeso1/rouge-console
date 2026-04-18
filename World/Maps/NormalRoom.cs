@@ -18,20 +18,16 @@ public class NormalRoom : TileMap
     {
         canvas1 = canvas;
         _logger = logger;
-        // GameState.PlayerInput += Update;
         Entity.EnemyMove += Update;
     }
 
 
-    public async Task Update(Entity entity)
+    public Task Update(Entity entity)
     {
-        await UpdatePos(entity);
-    }
-
-    private async Task UpdatePos(Entity entity)
-    {
+        if (!_enemyBuffer.Contains(entity)) return Task.CompletedTask;
         UnSet(entity.PrevPosition);
         Set(entity.Position, Tile.Goblin(entity.Position));
+        return Task.CompletedTask;
     }
 
     public async Task GenerateEnemies()

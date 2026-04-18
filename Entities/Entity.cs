@@ -43,7 +43,7 @@ public abstract class Entity {
         Point newPos = Controls.Move(directions[Rng.GetRandom().Next(0, 4)], Position);
         PrevPosition = Position;
         Position = newPos;
-        EnemyMove.Invoke(this);
+        EnemyMove?.Invoke(this);
     }
 
     // protected void CheckPlayer() {

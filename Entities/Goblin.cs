@@ -12,12 +12,5 @@ public class Goblin : Entity {
     public Goblin(Point position, int health, int maxHealth) : base(position, health, maxHealth, EntityType.Enemy) {
         goblinHealth = health;
         goblinMaxHealth = MaxHealth;
-        Position = position;
-
-        GameState.PlayerInput += Update;
-    }
-
-    protected override void Update(object sender, Point playerPos) {
-        base.Update(sender, playerPos);
     }
 }

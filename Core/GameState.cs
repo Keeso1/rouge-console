@@ -32,14 +32,13 @@ public sealed class GameState(Style playerBody, MapGen floor, ILogger logger, Ga
         }
 
 
-        PlayerInput?.Invoke(this, PrevPosition);
         CurrentRoom.RenderToCanvas();
         Canvas.Glyph(position, GameConstants.Player, playerBody); //Update player position
         PrevPosition = position;
 
         Rune[,] map = CanvasHelpers.RoomsToString(logger, settings, floor.Rooms, CurrentRoom);
         CanvasHelpers.RenderToMap(logger, MinimapCanvas, map, terminal);
-
+        PlayerInput?.Invoke(this, PrevPosition);
     }
 
 
