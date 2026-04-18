@@ -1,55 +1,57 @@
 using Vimonia.Enums;
 using Vimonia.Utils;
 using Sharpie;
-using System.Drawing;
-
 using Microsoft.Extensions.Logging;
 using Vimonia.Core;
+using Vimonia.Entities;
 
 namespace Vimonia.World.Maps;
 
+public class NormalRoom : TileMap
+{
 
-public class NormalRoom: TileMap{
+    private List<Entity> _enemyBuffer = [];
+    private Canvas canvas1 { get; set; }
+    private ILogger _logger { get; set; }
 
-    public List<Point> Enemies {get; set;} = [];
-    private Canvas canvas1 {get; set;}
-    private ILogger _logger {get; set;}
-
-    public NormalRoom(Canvas canvas, ILogger logger) : base(canvas, logger){
+    public NormalRoom(Canvas canvas, ILogger logger) : base(canvas, logger)
+    {
         canvas1 = canvas;
         _logger = logger;
-        GameState.PlayerInput += Update;
+        // GameState.PlayerInput += Update;
+        Entity.EnemyMove += Update;
     }
 
 
-    public async void Update(object? sender, Point playerPos){
-        await UpdatePos(playerPos);
-
+    public async Task Update(Entity entity)
+    {
+        await UpdatePos(entity);
     }
 
-    private async Task UpdatePos(Point playerPos){
-        for(int i = 0; i < Enemies.Count; i++){
-            UnSet(Enemies[i]);
-            Cardinals direction = (Cardinals)Rng.GetRandom().Next(0,4);
-            Enemies[i] = Enemies[i].IncrementCardinal(direction);
-            Set(Enemies[i], Tile.Goblin(Enemies[i]));
+    private async Task UpdatePos(Entity entity)
+    {
+        UnSet(entity.PrevPosition);
+        Set(entity.Position, Tile.Goblin(entity.Position));
+    }
+
+    public async Task GenerateEnemies()
+    {
+        int numberOfEnemies = Rng.GetRandom().Next(1, 10);
+        for (int num = 0; num < numberOfEnemies; num++)
+        {
+            _enemyBuffer.Add(new Goblin(Rng.GetRandomFromCanvas().ToPoint(), 100, 100));
         }
     }
 
-    public async Task GenerateEnemies(){
-        int numberOfEnemies = Rng.GetRandom().Next(1,10);
-        for(int num = 0; num < numberOfEnemies; num++){
-            Enemies.Add(Rng.GetRandomFromCanvas().ToPoint());
-        }
-    }
-
-    public async override void InitMap() {
+    public async override void InitMap()
+    {
         base.InitMap();
         RoomType = RoomTypes.Normal;
 
         await GenerateEnemies();
-        foreach(Point enemyPos in Enemies){
-            Set(enemyPos, Tile.Goblin(enemyPos));
+        foreach (Entity enemy in _enemyBuffer)
+        {
+            Set(enemy.Position, Tile.Goblin(enemy.Position));
         }
     }
 

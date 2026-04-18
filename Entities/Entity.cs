@@ -1,5 +1,4 @@
 using System.Drawing;
-using Microsoft.Extensions.Logging;
 using Vimonia.Core;
 using Vimonia.Enums;
 
@@ -12,7 +11,11 @@ public abstract class Entity {
     public int Health { get; set; }
     public int MaxHealth { get; set; }
     public bool IsDead => Health <= 0;
-    public Point Position {get; set;}
+    public Point Position { get; set; }
+    public Point PrevPosition { get; set; }
+
+    public delegate Task EnemyInfo(Entity sender);
+    public static event EnemyInfo EnemyMove;
 
     private int _tickCount = 0;
     protected Point _playerPos = new(0, 0);
@@ -37,8 +40,10 @@ public abstract class Entity {
         _playerPos = playerPos;
 
         Direction[] directions = Enum.GetValues<Direction>();
-        Controls.Move(directions[Rng.GetRandom().Next(0,3)], Position);
-
+        Point newPos = Controls.Move(directions[Rng.GetRandom().Next(0, 4)], Position);
+        PrevPosition = Position;
+        Position = newPos;
+        EnemyMove.Invoke(this);
     }
 
     // protected void CheckPlayer() {

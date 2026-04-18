@@ -9,8 +9,7 @@ using System.Text;
 
 namespace Vimonia.Core;
 
-public sealed class GameState(Style playerBody, MapGen floor, ILogger logger, GameSettings settings, Terminal terminal)
-{
+public sealed class GameState(Style playerBody, MapGen floor, ILogger logger, GameSettings settings, Terminal terminal) {
     public static event EventHandler<Point> PlayerInput;
     public static event EventHandler<GamePhase> CurrentState;
     public static event Action? OnTick; //TODO: Keep or not to keep? That is the question...
@@ -23,8 +22,7 @@ public sealed class GameState(Style playerBody, MapGen floor, ILogger logger, Ga
     public required Canvas MinimapCanvas { get; set; }
 
 
-    public void Update(Direction? direction)
-    {
+    public void Update(Direction? direction) {
 
         Point position = Controls.Move(direction, PrevPosition);
 
@@ -39,8 +37,8 @@ public sealed class GameState(Style playerBody, MapGen floor, ILogger logger, Ga
         Canvas.Glyph(position, GameConstants.Player, playerBody); //Update player position
         PrevPosition = position;
 
-		Rune[,] map = CanvasHelpers.RoomsToString(logger, settings, floor.Rooms, CurrentRoom);
-		CanvasHelpers.RenderToMap(logger, MinimapCanvas, map, terminal);
+        Rune[,] map = CanvasHelpers.RoomsToString(logger, settings, floor.Rooms, CurrentRoom);
+        CanvasHelpers.RenderToMap(logger, MinimapCanvas, map, terminal);
 
     }
 
