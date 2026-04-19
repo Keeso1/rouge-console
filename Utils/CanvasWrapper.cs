@@ -18,4 +18,14 @@ public static class CanvasWrapper{
         _initialized = true;
     }
 
+    public static HashSet<Point> AllCanvasPoints(){
+        HashSet<Point> accumulated = [];
+        for(int x = 0; x < Instance.Size.Width; x++){
+            for(int y = 0; y < Instance.Size.Height; y++){
+                accumulated.Add(new(x,y));
+            }
+        }
+        return accumulated;
+    }
+
 }
