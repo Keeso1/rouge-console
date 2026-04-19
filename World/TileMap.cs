@@ -1,5 +1,4 @@
 using System.Drawing;
-using Microsoft.Extensions.Logging;
 using Vimonia.Core;
 using Vimonia.Enums;
 using Vimonia.Utils;
@@ -40,12 +39,16 @@ public class TileMap {
     ///</summary>
     protected void Set((int x, int y) coord, Tile tile) => Tiles[coord.x, coord.y] = tile;
 
+    protected void Set(Point coord, Tile tile) => Tiles[coord.X, coord.Y] = tile;
+
+    protected void UnSet(Point coord) => Tiles[coord.X, coord.Y] = Tile.Floor();
+
     public bool IsWalkable(int x, int y) => (x, y).InBounds(Canvas.Size) && Tiles[x, y].Walkable;
 
     protected void Fill() {
         for (int w = 0; w < Canvas.Size.Width; w++) {
             for (int h = 0; h < Canvas.Size.Height; h++) {
-                Set(w, h, Tile.Floor);
+                Set(w, h, Tile.Floor());
             }
         }
     }
@@ -60,16 +63,16 @@ public class TileMap {
         foreach (Cardinals neighbor in Neighbors) {
             switch (neighbor) {
                 case Cardinals.North:
-                    Set(GetCanvasCoords.GetCanvasTopCenter(Canvas), Tile.Door);
+                    Set(GetCanvasCoords.GetCanvasTopCenter(Canvas), Tile.Door());
                     break;
                 case Cardinals.East:
-                    Set(GetCanvasCoords.GetCanvasRightCenter(Canvas), Tile.Door);
+                    Set(GetCanvasCoords.GetCanvasRightCenter(Canvas), Tile.Door());
                     break;
                 case Cardinals.West:
-                    Set(GetCanvasCoords.GetCanvasLeftCenter(Canvas), Tile.Door);
+                    Set(GetCanvasCoords.GetCanvasLeftCenter(Canvas), Tile.Door());
                     break;
                 case Cardinals.South:
-                    Set(GetCanvasCoords.GetCanvasBottomCenter(Canvas), Tile.Door);
+                    Set(GetCanvasCoords.GetCanvasBottomCenter(Canvas), Tile.Door());
                     break;
                 case Cardinals.Unknown:
                     continue;
@@ -82,16 +85,16 @@ public class TileMap {
     public virtual void InitMap() {
         Tiles = new Tile[Canvas.Size.Width, Canvas.Size.Height];
         Fill();
-        Set(GenRocks(), Tile.Rock);
-        Set(GetCanvasCoords.GetVerticalLine(0, 0, Canvas.Size.Height), Tile.Wall);
+        Set(GenRocks(), Tile.Rock());
+        Set(GetCanvasCoords.GetVerticalLine(0, 0, Canvas.Size.Height), Tile.Wall());
         Set(
             GetCanvasCoords.GetVerticalLine(Canvas.Size.Width - 1, 0, Canvas.Size.Height),
-            Tile.Wall
+            Tile.Wall()
         );
-        Set(GetCanvasCoords.GetHorizontalLine(0, 0, Canvas.Size.Width), Tile.Wall);
+        Set(GetCanvasCoords.GetHorizontalLine(0, 0, Canvas.Size.Width), Tile.Wall());
         Set(
             GetCanvasCoords.GetHorizontalLine(Canvas.Size.Height - 1, 0, Canvas.Size.Width),
-            Tile.Wall
+            Tile.Wall()
         );
 
         if (Neighbors != null) {
@@ -115,7 +118,7 @@ public class TileMap {
     public static TileMap GetRoom(RoomTypes type, Canvas canvas) =>
         type switch {
             RoomTypes.Spawn => new SpawnRoom(canvas),
-            RoomTypes.Normal => new NormalRoom(canvas),
+            RoomTypes.Normal => new EnemyRoom(canvas),
             RoomTypes.Item => new ItemRoom(canvas),
             RoomTypes.Boss => new BossRoom(canvas),
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, "Unsupported room type"),

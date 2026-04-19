@@ -38,14 +38,14 @@ public static class CanvasHelpers {
                 if (Rooms[x, y] != null) {
                     char roomType = Rooms[x, y].RoomType switch {
                         RoomTypes.Spawn => 's',
-                        RoomTypes.Item => 'i',
-                        RoomTypes.Boss => 'b',
-                        RoomTypes.Normal => 'n',
+                        RoomTypes.Item => '¤',
+                        RoomTypes.Boss => '☠',
+                        RoomTypes.Normal => '⛶',
                         _ => ' '
                     };
 
                     if (Rooms[x, y] == currentRoom) {
-                        roomType = 'C';
+                        roomType = '⛑';
                     }
 
                     map[x, y] = new Rune(roomType); //dafuq

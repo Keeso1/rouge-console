@@ -12,6 +12,13 @@ public static class TupleExtensions {
         yield return (t.x, t.y + 1); //South
     }
 
+    public static IEnumerable<Point> GetCardinalNeighbours(this Point t) {
+        yield return t with {Y = t.Y - 1}; //North
+        yield return t with {X = t.X - 1}; //West
+        yield return t with {X = t.X + 1}; //East
+        yield return t with {Y = t.Y + 1}; //South
+    }
+
     public static Cardinals ToCardinal(this (int x, int y) offset) {
         return offset switch {
             (0, -1) => Cardinals.North,
@@ -20,6 +27,20 @@ public static class TupleExtensions {
             (0, 1) => Cardinals.South,
             _ => Cardinals.Unknown,
         };
+    }
+
+    public static Point IncrementCardinal(this Point pos, Cardinals direction) {
+        return direction switch {
+            Cardinals.North => pos with {Y = Math.Clamp(pos.Y - 1, 1, CanvasWrapper.Instance.Size.Height - 2)},
+            Cardinals.West => pos with {X = Math.Clamp(pos.X - 1, 1, CanvasWrapper.Instance.Size.Width - 2)},
+            Cardinals.East => pos with {X = Math.Clamp(pos.X + 1, 1, CanvasWrapper.Instance.Size.Width - 2)},
+            Cardinals.South => pos with {Y = Math.Clamp(pos.Y + 1, 1, CanvasWrapper.Instance.Size.Height - 2)},
+            _ => pos,
+        };
+    }
+
+    public static Point ToPoint(this (int, int) input){
+        return new Point(input.Item1, input.Item2);
     }
 
     public static bool InBounds(this (int x, int y) t, Size size) =>

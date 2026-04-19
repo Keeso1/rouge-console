@@ -1,5 +1,4 @@
 using System.Drawing;
-using Microsoft.Extensions.Logging;
 using Vimonia.Core;
 using Vimonia.Enums;
 using Vimonia.Utils;
@@ -36,11 +35,13 @@ subWindow.Background = (new(' '),
 	});
 //
 
-Canvas canvas = new(window.Size);
-Canvas minimapCanvas = new(subWindow.Size);
-Rng.Init(canvas);
+CanvasWrapper.Init(window.Size);
 
-MapGen floor = new(canvas, settings);
+Canvas minimapCanvas = new(subWindow.Size);
+
+Rng.Init(CanvasWrapper.Instance, 4);
+
+MapGen floor = new(CanvasWrapper.Instance, settings);
 
 var game = new GameState(
     new() {
@@ -52,8 +53,8 @@ var game = new GameState(
 	terminal
 )
 {
-    Canvas = canvas,
-	PrevPosition = new(canvas.Size.Width / 2, canvas.Size.Height / 2),
+    Canvas = CanvasWrapper.Instance,
+	PrevPosition = new(CanvasWrapper.Instance.Size.Width / 2, CanvasWrapper.Instance.Size.Height / 2),
 	CurrentRoom = floor.Rooms[settings.NumberOfRooms +1, settings.NumberOfRooms +1],
 	MinimapCanvas = minimapCanvas
 };
@@ -67,7 +68,7 @@ terminal.Repeat(
     {
 		game.Canvas.DrawOnto(
 			window,
-			new Rectangle(new Point(0, 0), canvas.Size),
+			new Rectangle(new Point(0, 0), CanvasWrapper.Instance.Size),
 			new Point(0, 0)
 		);
 

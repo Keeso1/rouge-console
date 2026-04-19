@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Logging;
 using Vimonia.Enums;
 using Vimonia.Utils;
 using Sharpie;
@@ -12,6 +11,6 @@ public class ItemRoom(Canvas canvas) : TileMap(canvas) {
         Set(GetCanvasCoords.GetCanvasCenter(canvas)
                 .Subtract(0, 10)
                 .Clamp(canvas.Size),
-                Tile.Chest);
+                Tile.Chest());
     }
 }

@@ -11,32 +11,20 @@ namespace Vimonia.Core;
 
 public sealed class GameState(Style playerBody, MapGen floor, GameSettings settings, Terminal terminal) {
     public static event EventHandler<GamePhase> CurrentState;
-    public static event Action? OnTick;
+    public static event EventHandler<Point> PlayerInput;
+    public static event Action? OnTick; //TODO: Keep or not to keep? That is the question...
 
     public required TileMap CurrentRoom { get; set; }
 
     public Point PrevPosition { get; set; }
-    public required Canvas Canvas { get; set; }
 
+    public required Canvas Canvas { get; set; }
     public required Canvas MinimapCanvas { get; set; }
 
 
     public void Update(Direction? direction) {
-        Point position = direction switch {
-            Direction.Down => PrevPosition with {
-                Y = Math.Clamp(PrevPosition.Y + 1, 0, Canvas.Size.Height - 1),
-            },
-            Direction.Up => PrevPosition with {
-                Y = Math.Clamp(PrevPosition.Y - 1, 0, Canvas.Size.Height - 1),
-            },
-            Direction.Left => PrevPosition with {
-                X = Math.Clamp(PrevPosition.X - 1, 0, Canvas.Size.Width - 1),
-            },
-            Direction.Right => PrevPosition with {
-                X = Math.Clamp(PrevPosition.X + 1, 0, Canvas.Size.Width - 1),
-            },
-            _ => PrevPosition,
-        };
+
+        Point position = Controls.Move(direction, PrevPosition, CurrentRoom);
 
         if (CurrentRoom.Tiles[position.X, position.Y].Glyph == GameConstants.Door) {
 
@@ -50,7 +38,9 @@ public sealed class GameState(Style playerBody, MapGen floor, GameSettings setti
 
         Rune[,] map = CanvasHelpers.RoomsToString(settings, floor.Rooms, CurrentRoom);
         CanvasHelpers.RenderToMap(MinimapCanvas, map, terminal);
+        PlayerInput?.Invoke(this, PrevPosition);
     }
+
 
     public Point EnterNewRoom(Point position) {
 
@@ -71,8 +61,7 @@ public sealed class GameState(Style playerBody, MapGen floor, GameSettings setti
         var (newRoomx, newRoomy) = CurrentRoom.GetCoordsInFloor(floor);
         var offset = (newRoomx - roomX, newRoomy - roomY);
 
-        var directionOfNewRoom = Utils.TupleExtensions.ToCardinal(offset);
-        position = directionOfNewRoom switch {
+        var directionOfNewRoom = Utils.TupleExtensions.ToCardinal(offset); position = directionOfNewRoom switch {
 
             Cardinals.North => new(GetCanvasCoords.GetCanvasBottomCenter(Canvas).Item1, GetCanvasCoords.GetCanvasBottomCenter(Canvas).Item2 - 1), // minus one so it is not on the door
             Cardinals.East => new(GetCanvasCoords.GetCanvasLeftCenter(Canvas).Item1 + 1, GetCanvasCoords.GetCanvasLeftCenter(Canvas).Item2),
