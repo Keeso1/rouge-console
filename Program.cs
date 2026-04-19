@@ -16,23 +16,26 @@ var terminal = new Terminal(
 );
 
 
-var window = terminal.Screen.Window(new(1, 1, terminal.Screen.Size.Width - 2, terminal.Screen.Size.Height - 2));
+var availableWidth = terminal.Screen.Size.Width - 2;
+var availableHeight = terminal.Screen.Size.Height - 2;
+var windowWidth = Math.Min(availableWidth, availableHeight * 2);
+var windowHeight = windowWidth / 2;
+var window = terminal.Screen.Window(new(1, 1, windowWidth, windowHeight));
 
 //MINIMAP TESTING
-var subWindow = terminal.Screen.Window(new(1, 1, terminal.Screen.Size.Width / 2, terminal.Screen.Size.Height / 2));
+var subWindow = terminal.Screen.Window(new(1, 1, window.Size.Width / 4, window.Size.Height / 4));
+
 window.Background = (new(' '),
-	new()
-	{
-		Attributes = VideoAttribute.None,
-		ColorMixture = terminal.Colors.MixColors((short) StandardColor.Default, 100)
-	});
+    new() {
+        Attributes = VideoAttribute.None,
+        ColorMixture = terminal.Colors.MixColors((short)StandardColor.Default, 100)
+    });
 
 subWindow.Background = (new(' '),
-	new()
-	{
-		Attributes = VideoAttribute.None,
-		ColorMixture = terminal.Colors.MixColors((short) StandardColor.Default, 60)
-	});
+    new() {
+        Attributes = VideoAttribute.None,
+        ColorMixture = terminal.Colors.MixColors((short)StandardColor.Default, 60)
+    });
 //
 
 CanvasWrapper.Init(window.Size);
@@ -49,14 +52,13 @@ var game = new GameState(
         ColorMixture = terminal.Colors.MixColors(StandardColor.Magenta, StandardColor.Black),
     },
     floor,
-	settings,
-	terminal
-)
-{
+    settings,
+    terminal
+) {
     Canvas = CanvasWrapper.Instance,
-	PrevPosition = new(CanvasWrapper.Instance.Size.Width / 2, CanvasWrapper.Instance.Size.Height / 2),
-	CurrentRoom = floor.Rooms[settings.NumberOfRooms +1, settings.NumberOfRooms +1],
-	MinimapCanvas = minimapCanvas
+    PrevPosition = new(CanvasWrapper.Instance.Size.Width / 2, CanvasWrapper.Instance.Size.Height / 2),
+    CurrentRoom = floor.Rooms[settings.NumberOfRooms + 1, settings.NumberOfRooms + 1],
+    MinimapCanvas = minimapCanvas
 };
 
 
@@ -64,20 +66,19 @@ var game = new GameState(
 game.Update(null);
 
 terminal.Repeat(
-    t =>
-    {
-		game.Canvas.DrawOnto(
-			window,
-			new Rectangle(new Point(0, 0), CanvasWrapper.Instance.Size),
-			new Point(0, 0)
-		);
+    t => {
+        game.Canvas.DrawOnto(
+            window,
+            new Rectangle(new Point(1, 1), CanvasWrapper.Instance.Size),
+            new Point(0, 0)
+        );
 
-		// MINIMAP
-		game.MinimapCanvas.DrawOnto(
-			subWindow,
-			new Rectangle(new Point(0, 0), minimapCanvas.Size),
-			new Point(0, 0)
-		);
+        // MINIMAP
+        game.MinimapCanvas.DrawOnto(
+            subWindow,
+            new Rectangle(new Point(0, 0), minimapCanvas.Size),
+            new Point(0, 0)
+        );
 
         t.Screen.Refresh();
         // t.Screen.DrawBorder();
@@ -105,14 +106,13 @@ terminal.Run(
             case KeyEvent { Char.Value: 'l' }:
                 game.Update(Direction.Right);
                 break;
-			case KeyEvent { Char.Value: 'm'}:
-				subWindow.Visible = !subWindow.Visible; //Toggle window
-                if (subWindow.Visible)
-            	{
-            		window.SendToBack();
-            		subWindow.BringToFront();
-            	}
-				break;
+            case KeyEvent { Char.Value: 'm' }:
+                subWindow.Visible = !subWindow.Visible; //Toggle window
+                if (subWindow.Visible) {
+                    window.SendToBack();
+                    subWindow.BringToFront();
+                }
+                break;
         }
         ;
         return Task.FromResult(true);

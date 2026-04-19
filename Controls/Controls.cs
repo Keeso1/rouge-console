@@ -2,13 +2,11 @@ using System.Drawing;
 using Vimonia.Enums;
 using Vimonia.World;
 
-public static class Controls{
+public static class Controls {
 
-    public static Point Move(Direction? direction, Point PrevPosition, TileMap CurrentRoom){
-        Point position = direction switch
-        {
-            Direction.Down => PrevPosition with
-            {
+    public static Point Move(Direction? direction, Point PrevPosition, TileMap CurrentRoom) {
+        Point position = direction switch {
+            Direction.Down => PrevPosition with {
                 Y = Math.Clamp(PrevPosition.Y + 1, 0, CanvasWrapper.Instance.Size.Height - 1),
             },
             Direction.Up => PrevPosition with {
@@ -23,19 +21,17 @@ public static class Controls{
             _ => PrevPosition,
         };
 
-        if(CurrentRoom.Tiles[position.X, position.Y].Walkable){
+        if (CurrentRoom.Tiles[position.X, position.Y].Walkable) {
             return position;
-        }else{
+        } else {
             return PrevPosition;
         }
     }
 
 
-    public static Point Move(Direction? direction, Point PrevPosition, TileMap CurrentRoom, Point playerPos){
-        Point position = direction switch
-        {
-            Direction.Down => PrevPosition with
-            {
+    public static Point Move(Direction? direction, Point PrevPosition, TileMap CurrentRoom, Point playerPos) {
+        Point position = direction switch {
+            Direction.Down => PrevPosition with {
                 Y = Math.Clamp(PrevPosition.Y + 1, 1, CanvasWrapper.Instance.Size.Height - 2),
             },
             Direction.Up => PrevPosition with {
@@ -49,9 +45,9 @@ public static class Controls{
             },
             _ => PrevPosition,
         };
-        if(CurrentRoom.Tiles[position.X, position.Y].Walkable){
+        if (CurrentRoom.Tiles[position.X, position.Y].Walkable) {
             return position;
-        }else{
+        } else {
             return PrevPosition;
         }
     }

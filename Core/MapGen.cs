@@ -11,6 +11,7 @@ public class MapGen {
     public TileMap[,] Rooms { get; private set; }
     private GameSettings Settings { get; set; }
     private Size Size { get; set; }
+    public (int x, int y) maxSize { get; set; }
 
     public MapGen(Canvas canvas, GameSettings settings) {
         Settings = settings;
@@ -66,6 +67,7 @@ public class MapGen {
         (int x, int y) = BFS.Execute(Rooms, Settings); //Breadth-first-search
         Rooms[x, y] = TileMap.GetRoom(RoomTypes.Boss, canvas);
         Rooms[x, y].InitMap();
+        maxSize = (x, y);
     }
 
     public void SetDoors() {
