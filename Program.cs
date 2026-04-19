@@ -16,10 +16,14 @@ var terminal = new Terminal(
 );
 
 
-var window = terminal.Screen.Window(new(1, 1, terminal.Screen.Size.Width - 2, (terminal.Screen.Size.Height - 2) / 2));
+var availableWidth = terminal.Screen.Size.Width - 2;
+var availableHeight = terminal.Screen.Size.Height - 2;
+var windowWidth = Math.Min(availableWidth, availableHeight * 2);
+var windowHeight = windowWidth / 2;
+var window = terminal.Screen.Window(new(1, 1, windowWidth, windowHeight));
 
 //MINIMAP TESTING
-var subWindow = terminal.Screen.Window(new(1, 1, window.Size.Width / 4, window.Size.Height / 2));
+var subWindow = terminal.Screen.Window(new(1, 1, window.Size.Width / 4, window.Size.Height / 4));
 
 window.Background = (new(' '),
     new() {
