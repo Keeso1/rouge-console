@@ -39,6 +39,7 @@ public sealed class GameState(Style playerBody, MapGen floor, GameSettings setti
         Rune[,] map = CanvasHelpers.RoomsToString(settings, floor.Rooms, CurrentRoom);
         CanvasHelpers.RenderToMap(MinimapCanvas, map, terminal);
         PlayerInput?.Invoke(this, PrevPosition);
+        OnTick?.Invoke();
     }
 
 
