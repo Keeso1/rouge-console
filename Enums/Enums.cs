@@ -4,6 +4,7 @@ public enum GamePhase {
     Running,
     GameOver,
     Victory,
+    Menu,
 }
 
 public enum Direction {
@@ -31,4 +32,12 @@ public enum RoomTypes {
     Item = 2,
     Boss = 3,
     Normal = 4,
+}
+
+public enum SkillTypes {
+    Delete,
+    Yank,
+    Paste,
+    Write,
+    Goto
 }
