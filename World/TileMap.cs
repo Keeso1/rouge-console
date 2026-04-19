@@ -119,7 +119,7 @@ public class TileMap {
     public static TileMap GetRoom(RoomTypes type, Canvas canvas, ILogger logger) =>
         type switch {
             RoomTypes.Spawn => new SpawnRoom(canvas, logger),
-            RoomTypes.Normal => new NormalRoom(canvas, logger),
+            RoomTypes.Normal => new EnemyRoom(canvas, logger),
             RoomTypes.Item => new ItemRoom(canvas, logger),
             RoomTypes.Boss => new BossRoom(canvas, logger),
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, "Unsupported room type"),
