@@ -24,7 +24,7 @@ public sealed class GameState(Style playerBody, MapGen floor, ILogger logger, Ga
 
     public void Update(Direction? direction) {
 
-        Point position = Controls.Move(direction, PrevPosition);
+        Point position = Controls.Move(direction, PrevPosition, CurrentRoom);
 
         if (CurrentRoom.Tiles[position.X, position.Y].Glyph == GameConstants.Door) {
 

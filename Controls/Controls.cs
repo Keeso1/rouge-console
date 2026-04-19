@@ -1,9 +1,10 @@
 using System.Drawing;
 using Vimonia.Enums;
+using Vimonia.World;
 
 public static class Controls{
 
-    public static Point Move(Direction? direction, Point PrevPosition){
+    public static Point Move(Direction? direction, Point PrevPosition, TileMap CurrentRoom){
         Point position = direction switch
         {
             Direction.Down => PrevPosition with
@@ -21,11 +22,16 @@ public static class Controls{
             },
             _ => PrevPosition,
         };
-        return position;
+
+        if(CurrentRoom.Tiles[position.X, position.Y].Walkable){
+            return position;
+        }else{
+            return PrevPosition;
+        }
     }
 
 
-    public static Point Move(Direction? direction, Point PrevPosition, Point playerPos){
+    public static Point Move(Direction? direction, Point PrevPosition, TileMap CurrentRoom, Point playerPos){
         Point position = direction switch
         {
             Direction.Down => PrevPosition with
@@ -43,6 +49,10 @@ public static class Controls{
             },
             _ => PrevPosition,
         };
-        return position;
+        if(CurrentRoom.Tiles[position.X, position.Y].Walkable){
+            return position;
+        }else{
+            return PrevPosition;
+        }
     }
 }

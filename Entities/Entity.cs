@@ -1,6 +1,7 @@
 using System.Drawing;
 using Vimonia.Core;
 using Vimonia.Enums;
+using Vimonia.World;
 
 namespace Vimonia.Entities;
 
@@ -13,6 +14,7 @@ public abstract class Entity {
     public bool IsDead => Health <= 0;
     public Point Position { get; set; }
     public Point PrevPosition { get; set; }
+    private TileMap _currentRoom {get; set;}
 
     public delegate Task EnemyInfo(Entity sender);
     public static event EnemyInfo EnemyMove;
@@ -20,11 +22,12 @@ public abstract class Entity {
     private int _tickCount = 0;
     protected Point _playerPos = new(0,0);
 
-    protected Entity(Point position, int health, int maxhealth, EntityType type) {
+    protected Entity(Point position, int health, int maxhealth, TileMap currentRoom, EntityType type) {
         Health = health;
         MaxHealth = maxhealth;
         Type = type;
         Position = position;
+        _currentRoom = currentRoom;
 
         GameState.PlayerInput += Update;
         GameState.CurrentState += CheckState;
@@ -40,7 +43,7 @@ public abstract class Entity {
         _playerPos = playerPos;
 
         Direction[] directions = Enum.GetValues<Direction>();
-        Point newPos = Controls.Move(directions[Rng.GetRandom().Next(0, 4)], Position, _playerPos);
+        Point newPos = Controls.Move(directions[Rng.GetRandom().Next(0, 4)], Position, _currentRoom, _playerPos);
         PrevPosition = Position;
         Position = newPos;
         EnemyMove?.Invoke(this);
