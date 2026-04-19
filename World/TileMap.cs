@@ -110,11 +110,6 @@ public class TileMap {
         }
     }
 
-    // public void Update()
-    // {
-    // 	// RenderToCanvas();
-    // }
-
     public static TileMap GetRoom(RoomTypes type, Canvas canvas) =>
         type switch {
             RoomTypes.Spawn => new SpawnRoom(canvas),
