@@ -15,6 +15,7 @@ public abstract class Entity {
     public Point Position { get; set; }
     public Point PrevPosition { get; set; }
     private TileMap _currentRoom {get; set;}
+    private static readonly Direction[] s_directions = Enum.GetValues<Direction>();
 
     public delegate Task EnemyInfo(Entity sender);
     public static event EnemyInfo EnemyMove;
@@ -38,12 +39,13 @@ public abstract class Entity {
         _tickCount++;
         if (IsDead) {
             GameState.CurrentState -= CheckState;
+            GameState.PlayerInput -= Update;
+            return;
         }
 
         _playerPos = playerPos;
 
-        Direction[] directions = Enum.GetValues<Direction>();
-        Point newPos = Controls.Move(directions[Rng.GetRandom().Next(0, 4)], Position, _currentRoom, _playerPos);
+        Point newPos = Controls.Move(s_directions[Rng.GetRandom().Next(s_directions.Length)], Position, _currentRoom, _playerPos);
         PrevPosition = Position;
         Position = newPos;
         EnemyMove?.Invoke(this);
