@@ -1,4 +1,6 @@
+using System.Drawing;
 using Sharpie;
+using Vimonia.World;
 
 namespace Vimonia.Utils;
 
@@ -24,6 +26,23 @@ public static class GetCanvasCoords {
         for (int y = from; y < to; y++) {
             yield return (y, setCoord);
         }
+    }
+
+    public static (int x, int y) GetMaxDimensions(TileMap[,] floorLayout) {
+        int maxY = 0;
+        int maxX = 0;
+        int midX = floorLayout.GetLength(0) / 2;
+        int midY = floorLayout.GetLength(1) / 2;
+        for (int x = 0; x < floorLayout.GetLength(0); x++) {
+            for (int y = 0; y < floorLayout.GetLength(1); y++) {
+                if (floorLayout[x, y] != null) {
+                    maxX = Math.Max(maxX, Math.Abs(x - midX));
+                    maxY = Math.Max(maxY, Math.Abs(y - midY));
+                }
+            }
+        }
+
+        return (maxX, maxY);
     }
 
 }
