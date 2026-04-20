@@ -30,12 +30,22 @@ public static class CanvasHelpers {
         }
     }
 
-    public static Rune[,] RoomsToString(GameSettings settings, TileMap[,] Rooms, TileMap currentRoom) //Helper func to see the grid in a clean way
+    public static Rune[,] RoomsToString(GameSettings settings, TileMap[,] Rooms, TileMap currentRoom, (int x, int y) maxDiff) //Helper func to see the grid in a clean way
     {
-        Rune[,] map = new Rune[Rooms.GetLength(0), Rooms.GetLength(1)];
-        for (int y = 0; y < Rooms.GetLength(1); y++) {
-            for (int x = 0; x < Rooms.GetLength(0); x++) {
-                if (Rooms[x, y] != null) {
+        int midX = Rooms.GetLength(0) / 2;
+        int midY = Rooms.GetLength(1) / 2;
+
+        int width = 2 * maxDiff.x + 1; //1 is the middle, maxdiff to both sides hence * 2
+        int height = 2 * maxDiff.y + 1;
+
+        Rune[,] map = new Rune[width, height];
+
+        for (int x = midX - maxDiff.x; x <= midX + maxDiff.x; x++) {
+            for (int y = midY - maxDiff.y; y <= midY + maxDiff.y; y++) {
+                int targetX = x - (midX - maxDiff.x); // Make mid - diff into 0 so map starts at 0,0
+                int targetY = y - (midY - maxDiff.y);
+
+                if (x >= 0 && x < Rooms.GetLength(0) && y >= 0 && y < Rooms.GetLength(1) && Rooms[x, y] != null) {
                     char roomType = Rooms[x, y].RoomType switch {
                         RoomTypes.Spawn => 's',
                         RoomTypes.Item => '¤',
@@ -48,9 +58,9 @@ public static class CanvasHelpers {
                         roomType = '⛑';
                     }
 
-                    map[x, y] = new Rune(roomType); //dafuq
+                    map[targetX, targetY] = new Rune(roomType);
                 } else {
-                    map[x, y] = new Rune(' ');
+                    map[targetX, targetY] = new Rune(' ');
                 }
             }
         }
