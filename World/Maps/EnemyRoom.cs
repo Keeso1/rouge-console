@@ -14,6 +14,9 @@ public class EnemyRoom : TileMap {
 
 
     public void Dispose() {
+        foreach (var enemy in _enemyBuffer) {
+            enemy.Dispose();
+        }
         Entity.EnemyMove -= Update;
     }
 
@@ -39,14 +42,14 @@ public class EnemyRoom : TileMap {
         for (int num = 0; num < numberOfEnemies; num++) {
             HashSet<Point> visitedTiles = [];
             Point position = new(-1, -1);
-            string body = "Goblin"; 
+            string body = "Goblin";
 
             while (visitedTiles.Count < maxAttempts) {
                 Point candidate = Rng.GetRandomFromCanvas().ToPoint();
                 if (!visitedTiles.Add(candidate)) continue;
 
                 var wordBound = CanvasHelpers.GetWordBound(candidate, body);
-                
+
                 if (!wordBound.InBounds(canvasSize)) continue;
 
                 bool canPlace = true;
@@ -71,7 +74,7 @@ public class EnemyRoom : TileMap {
                 Set(CanvasHelpers.GetWordBound(position, goblin.Body), Tile.Goblin(goblin));
             } else {
                 // If we can't place more enemies, just stop instead of throwing and crashing the game
-                break; 
+                break;
             }
         }
     } //Evil fuckhack! #HACKTHEPLANET!

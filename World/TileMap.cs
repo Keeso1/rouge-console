@@ -127,7 +127,7 @@ public class TileMap {
                     continue;
                 }
 
-                if (Tiles[w, h].Entity != null) {
+                if (Tiles[w, h].Entity != null && !string.IsNullOrEmpty(Tiles[w, h].Text)) {
                     text = Tiles[w, h].Text;
                     Canvas.Text(new Point(w, h), text[0].ToString(), Canvas.Orientation.Horizontal, Style.Default);
                     text = text[1..];

@@ -37,11 +37,15 @@ public abstract class Entity : IEntity {
 
     }
 
+    public void Dispose() {
+        GameState.PlayerInput -= Update;
+        GameState.CurrentState -= CheckState;
+    }
+
     protected virtual void Update(object? sender, Point playerPos) {
         _tickCount++;
         if (IsDead) {
-            GameState.CurrentState -= CheckState;
-            GameState.PlayerInput -= Update;
+            Dispose();
             return;
         }
 
@@ -56,9 +60,8 @@ public abstract class Entity : IEntity {
     protected void CheckState(object? sender, GamePhase phase) {
         if (phase is GamePhase.Running) return;
         if (phase is GamePhase.GameOver || phase is GamePhase.Victory) {
-            GameState.CurrentState -= CheckState;
+            Dispose();
         }
-
     }
 }
 
