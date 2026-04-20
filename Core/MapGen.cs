@@ -120,14 +120,12 @@ public class MapGen {
     public void Generate(Canvas canvas) {
         var rand = new Random();
         List<(int, int)> activeRooms = GetNonEmptyRooms();
-        Log.Info($"active rooms count {activeRooms.Count}");
 
         // Retry until we find an expandable room or run out of candidates
         while (activeRooms.Count > 0) {
             var selIdx = rand.Next(activeRooms.Count);
             (int, int) selRoom = activeRooms[selIdx];
             var checkedRooms = CheckRooms(selRoom);
-            Log.Info($"checkedRooms: {checkedRooms.Count}");
             if (checkedRooms.Count > 0) {
                 // Successfully found an expandable room
                 var r = rand.Next(checkedRooms.Count);
@@ -141,7 +139,6 @@ public class MapGen {
                 break;
             } else {
                 // This room cannot expand, remove it from candidates
-                Log.Info($"removing Room at {selIdx}");
                 activeRooms.RemoveAt(selIdx);
             }
         }

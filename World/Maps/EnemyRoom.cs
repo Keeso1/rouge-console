@@ -18,9 +18,9 @@ public class EnemyRoom : TileMap {
 
 
     public Task Update(Entity entity) {
-        if (!_enemyBuffer.Contains(entity)) return Task.CompletedTask;        // UnSet(entity.PrevPosition);
-        CanvasWrapper.Instance.Text(entity.Position, entity.Body, Canvas.Orientation.Horizontal, Style.Default);
-        // Set(entity.Position, Tile.Goblin(entity));
+        if (!_enemyBuffer.Contains(entity)) return Task.CompletedTask;
+        UnSet(entity.PrevPosition);
+        Set(entity.Position, Tile.Goblin(entity));
         return Task.CompletedTask;
     }
 
