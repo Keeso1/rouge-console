@@ -16,12 +16,14 @@ public sealed class Player : IEntity {
     public bool IsDead => Health <= 0;
     public Dictionary<string, ISkill> Skills { get; private set; } = [];
     public Point Position { get; set; }
+    public Style Style { get; set; }
 
-    public Player(int health, int maxHealth, List<ISkill>? skills = null) {
+    public Player(int health, int maxHealth, Style style, List<ISkill>? skills = null) {
         Health = health;
         MaxHealth = maxHealth;
         if (skills != null) AddSkills(skills);
         Type = EntityType.Player;
+        Style = style;
 
         GameState.PlayerInput += OnPlayerInput;
         GameState.OnTick += Update;

@@ -8,7 +8,6 @@ namespace Vimonia.Entities;
 
 
 public abstract class Entity : IEntity {
-
     public EntityType Type { get; init; }
     public int Health { get; set; }
     public int MaxHealth { get; set; }
