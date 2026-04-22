@@ -2,6 +2,7 @@ using System.Drawing;
 using Vimonia.Core;
 using Vimonia.Enums;
 using Vimonia.Utils;
+using Vimonia.Entities;
 using Sharpie;
 using Sharpie.Backend;
 using Vimonia.Interfaces;
@@ -55,10 +56,7 @@ Player Player = new(100, 100, new() {
 Player.AddSkill(new DeleteSkill());
 
 var game = new GameState(
-    new() {
-        Attributes = VideoAttribute.Bold,
-        ColorMixture = terminal.Colors.MixColors(StandardColor.Magenta, StandardColor.Black),
-    },
+        Player,
     floor,
     settings,
     terminal
@@ -71,7 +69,7 @@ var game = new GameState(
 
 
 
-game.Update(null, null);
+game.Update(null);
 
 terminal.Repeat(
     t => {

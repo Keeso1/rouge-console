@@ -3,6 +3,7 @@ using Sharpie;
 using Vimonia.Core;
 using Vimonia.Interfaces;
 using Vimonia.Enums;
+using Vimonia.Utils;
 
 namespace Vimonia.Entities;
 
@@ -19,7 +20,7 @@ public sealed class Player : IEntity {
     public Style Style { get; set; }
     public string Combo { get; set; }
 
-    public Player(int health, int maxHealth, List<ISkill>? skills = null) {
+    public Player(int health, int maxHealth, Style style, List<ISkill>? skills = null) {
         Health = health;
         MaxHealth = maxHealth;
         if (skills != null) AddSkills(skills);
@@ -46,6 +47,7 @@ public sealed class Player : IEntity {
     public void UseSkill(string combo) {
         if (Skills.TryGetValue(combo, out var skill))
             UsedSkill?.Invoke(skill, Position);
+        Log.Info($"Used skill: {skill.Type}");
     }
 
     public void AddSkills(List<ISkill> skills) {

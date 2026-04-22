@@ -12,7 +12,7 @@ using Vimonia.Interfaces;
 
 namespace Vimonia.Core;
 
-public sealed class GameState(Style playerBody, MapGen floor, GameSettings settings, Terminal terminal) {
+public sealed class GameState(Player player, MapGen floor, GameSettings settings, Terminal terminal) {
     public static event EventHandler<GamePhase> CurrentState;
     public static event EventHandler<Point> PlayerInput;
     public static event Action? OnTick; //TODO: Keep or not to keep? That is the question...
@@ -44,7 +44,7 @@ public sealed class GameState(Style playerBody, MapGen floor, GameSettings setti
 
 
         CurrentRoom.RenderToCanvas();
-        Canvas.Glyph(position, GameConstants.Player, playerBody); //Update player position
+        Canvas.Glyph(position, GameConstants.Player, player.Style); //Update player position
         PrevPosition = position;
 
         if (CurrentRoom.Tiles[position.X, position.Y].Entity != null) {
