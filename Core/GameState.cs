@@ -42,6 +42,10 @@ public sealed class GameState(Player player, MapGen floor, GameSettings settings
             position = EnterNewRoom(position);
         }
 
+        if (CurrentRoom.Tiles[position.X, position.Y].Entity != null) {
+            player.TakeDamage(10);
+            Log.Info($"Health: {player.Health}");
+        }
 
         CurrentRoom.RenderToCanvas();
         Canvas.Glyph(position, GameConstants.Player, player.Style); //Update player position
