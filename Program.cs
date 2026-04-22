@@ -2,6 +2,7 @@ using System.Drawing;
 using Vimonia.Core;
 using Vimonia.Enums;
 using Vimonia.Utils;
+using Vimonia.Entities;
 using Sharpie;
 using Sharpie.Backend;
 
@@ -46,11 +47,13 @@ Rng.Init(CanvasWrapper.Instance, 4);
 
 MapGen floor = new(CanvasWrapper.Instance, settings);
 
+Player Player = new(100, 100, new() {
+    Attributes = VideoAttribute.Bold,
+    ColorMixture = terminal.Colors.MixColors(StandardColor.Magenta, StandardColor.Black),
+});
+
 var game = new GameState(
-    new() {
-        Attributes = VideoAttribute.Bold,
-        ColorMixture = terminal.Colors.MixColors(StandardColor.Magenta, StandardColor.Black),
-    },
+        Player,
     floor,
     settings,
     terminal
