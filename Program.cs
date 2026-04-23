@@ -53,6 +53,7 @@ Player Player = new(100, 100, new() {
     ColorMixture = terminal.Colors.MixColors(StandardColor.Magenta, StandardColor.Black),
 });
 
+CombatHandler combatHandler = new();
 Player.AddSkill(new DeleteSkill());
 
 var game = new GameState(

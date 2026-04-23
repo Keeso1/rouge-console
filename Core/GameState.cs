@@ -88,6 +88,8 @@ public sealed class GameState(Player player, MapGen floor, GameSettings settings
             _ => throw new Exception("Position is somehow not at the door")
         };
 
+        CombatHandler.Instance.Init(CurrentRoom);
+
         var (newRoomx, newRoomy) = CurrentRoom.GetCoordsInFloor(floor);
         var offset = (newRoomx - roomX, newRoomy - roomY);
 

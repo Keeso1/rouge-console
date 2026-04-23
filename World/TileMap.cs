@@ -122,18 +122,18 @@ public class TileMap {
 
     public void RenderToCanvas() {
         for (int h = 0; h < Canvas.Size.Height; h++) {
-            var text = "";
+            // var text = "";
             for (int w = 0; w < Canvas.Size.Width; w++) {
-                if (text.Length > 0) {
-                    Canvas.Text(new Point(w, h), text[0].ToString(), Canvas.Orientation.Horizontal, Style.Default);
-                    text = text[1..];
-                    continue;
-                }
+                // if (text.Length > 0) {
+                //     Canvas.Text(new Point(w, h), text[0].ToString(), Canvas.Orientation.Horizontal, Style.Default);
+                //     text = text[1..];
+                //     continue;
+                // }
 
                 if (Tiles[w, h].Entity != null && !string.IsNullOrEmpty(Tiles[w, h].Text)) {
-                    text = Tiles[w, h].Text;
-                    Canvas.Text(new Point(w, h), text[0].ToString(), Canvas.Orientation.Horizontal, Style.Default);
-                    text = text[1..];
+                    // text = Tiles[w, h].Text;
+                    Canvas.Text(new Point(w, h), Tiles[w, h].Text, Canvas.Orientation.Horizontal, Style.Default);
+                    // text = text[1..];
                 } else {
                     Canvas.Glyph(new Point(w, h), Tiles[w, h].Glyph, Style.Default);
                 }

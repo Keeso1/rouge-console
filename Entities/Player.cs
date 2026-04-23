@@ -9,7 +9,7 @@ namespace Vimonia.Entities;
 
 public sealed class Player : IEntity {
 
-    public event Action<ISkill, Point> UsedSkill;
+    public static event Action<ISkill, Point> UsedSkill;
 
     public EntityType Type { get; set; }
     public int Health { get; private set; }
