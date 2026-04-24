@@ -11,8 +11,9 @@ namespace Vimonia.Utils;
 public class CombatHandler {
     private static CombatHandler _combatHandler { get; set; }
     private TileMap CurrentRoom { get; set; }
-
-    public CombatHandler() {
+    private Player _player { get; set; }
+    public CombatHandler(Player player) {
+        _player = player;
         _combatHandler = this;
         Entities.Player.UsedSkill += onSkillUse;
     }
@@ -22,9 +23,37 @@ public class CombatHandler {
     }
 
     private void onSkillUse(ISkill skill, Point playerPos) {
-        if (CurrentRoom.Tiles[playerPos.X, playerPos.Y].Entity != null) {
+        if (CurrentRoom == null) {
+            return;
+        }
+
+        var entity = CurrentRoom.Tiles[playerPos.X, playerPos.Y].Entity;
+        if (entity == null) {
+            return;
+        }
+
+        List<Point>? lengthToRemove = CanvasHelpers.GetRemainingLetters(playerPos, entity, CurrentRoom);
+        if (lengthToRemove == null) {
+            return;
+        }
+
+        int startIndex = entity.Body.Length - lengthToRemove.Count;
+        if (startIndex >= 0 && startIndex <= entity.Body.Length) {
+            if (startIndex == 0) {
+                entity.Health = 0;
+                entity.Dispose();
+                CurrentRoom.Set(lengthToRemove, Tile.Floor());
+                Log.Info($"enemy health: {entity.Health}");
+
+            }
+            entity.Body = entity.Body.Remove(startIndex);
+            CurrentRoom.Tiles[playerPos.X, playerPos.Y].Text = entity.Body;
+            entity.Health = entity.Body.Length;
+            CurrentRoom.Set(lengthToRemove, Tile.Floor());
+            _player.Heal(lengthToRemove.Count * 10);
+            Log.Info($"Entity health: {entity.Health}, Tile Text Prop: {CurrentRoom.Tiles[playerPos.X, playerPos.Y].Text}");
         }
     }
 
-    public static CombatHandler Instance => _combatHandler ?? throw new InvalidOperationException($"Logger not initialized");
+    public static CombatHandler Instance => _combatHandler ?? throw new InvalidOperationException($"CombatHandler not initialized");
 }

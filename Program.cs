@@ -53,7 +53,7 @@ Player Player = new(100, 100, new() {
     ColorMixture = terminal.Colors.MixColors(StandardColor.Magenta, StandardColor.Black),
 });
 
-CombatHandler combatHandler = new();
+CombatHandler combatHandler = new(Player);
 Player.AddSkill(new DeleteSkill());
 
 var game = new GameState(
@@ -115,11 +115,15 @@ terminal.Run(
                 break;
             case KeyEvent { Char.Value: 'd' }:
                 Player.Combo += 'd';
-                game.Update(null);
+                if (Player.Combo.Length > 1) { // Don't shift enemies on first combo input
+                    game.Update(null);
+                }
                 break;
             case KeyEvent { Char.Value: 'w' }:
                 Player.Combo += 'w';
-                game.Update(null);
+                if (Player.Combo.Length > 1) { // Don't shift enemies on first combo input
+                    game.Update(null);
+                }
                 break;
             case KeyEvent { Char.Value: 'm' }:
                 subWindow.Visible = !subWindow.Visible; //Toggle window
