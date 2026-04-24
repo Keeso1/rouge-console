@@ -6,6 +6,8 @@ using Vimonia.Entities;
 using Sharpie;
 using Sharpie.Backend;
 using Vimonia.Interfaces;
+using Sharpie.Abstractions;
+using Sharpie.Font;
 
 string logFilePath = "console_log.txt";
 Log.Init(logFilePath);
@@ -14,8 +16,9 @@ GameSettings settings = new() { NumberOfRooms = 7 }; //grid size 16x16, no way t
 
 var terminal = new Terminal(
     CursesBackend.Load(),
-    new TerminalOptions(UseColors: true, CaretMode: CaretMode.Invisible, UseMouse: false, ManagedWindows: true)
+    new TerminalOptions(UseColors: true, CaretMode: CaretMode.Invisible, UseMouse: false, ManagedWindows: true, AllocateHeader: true) { AllocateHeader = true }
 );
+
 
 
 var availableWidth = terminal.Screen.Size.Width - 2;
@@ -25,7 +28,7 @@ var windowHeight = windowWidth / 2;
 var window = terminal.Screen.Window(new(1, 1, windowWidth, windowHeight));
 
 //MINIMAP TESTING
-var subWindow = terminal.Screen.Window(new(1, 1, window.Size.Width / 4, window.Size.Height / 4));
+var subWindow = terminal.Screen.Window(new(window.Size.Width + ((window.Size.Width / 4) / 2), ((window.Size.Width / 4) / 2), window.Size.Width / 4, window.Size.Height / 4));
 
 window.Background = (new(' '),
     new() {
@@ -56,7 +59,10 @@ Player Player = new(100, 100, new() {
 CombatHandler combatHandler = new(Player);
 Player.AddSkill(new DeleteSkill());
 
+Canvas headerCanvas = new(terminal.Header.Size);
+
 var game = new GameState(
+        headerCanvas,
         Player,
     floor,
     settings,
@@ -75,6 +81,20 @@ game.Update(null);
 
 terminal.Repeat(
     t => {
+
+        t.Header.Background = ((new(' '),
+        new() {
+            Attributes = VideoAttribute.None,
+            ColorMixture = terminal.Colors.MixColors((short)StandardColor.Default, 100)
+        })
+        );
+
+        // Fill canvas logic here if needed, then:
+        headerCanvas.DrawOnto(t.Header, new Rectangle(Point.Empty, t.Header.Size), Point.Empty);
+        var currCombo = Player.Combo.Length > 0 ? Player.Combo : string.Empty;
+        headerCanvas.Text(new(0, 0), $"Combo: {currCombo}", Canvas.Orientation.Horizontal, Style.Default);
+        t.Header.Refresh();
+
         game.Canvas.DrawOnto(
             window,
             new Rectangle(new Point(1, 1), CanvasWrapper.Instance.Size),

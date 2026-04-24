@@ -12,7 +12,7 @@ using Vimonia.Interfaces;
 
 namespace Vimonia.Core;
 
-public sealed class GameState(Player player, MapGen floor, GameSettings settings, Terminal terminal) {
+public sealed class GameState(Canvas HeaderCanvas, Player player, MapGen floor, GameSettings settings, Terminal terminal) {
     public static event EventHandler<GamePhase> CurrentState;
     public static event EventHandler<Point> PlayerInput;
     public static event Action? OnTick; //TODO: Keep or not to keep? That is the question...
@@ -61,6 +61,8 @@ public sealed class GameState(Player player, MapGen floor, GameSettings settings
         if (player.Combo.Length > 2) {
             player.Combo = "";
         }
+
+        //Current combo
 
         Rune[,] map = CanvasHelpers.RoomsToString(settings, floor.Rooms, CurrentRoom, GetCanvasCoords.GetMaxDimensions(floor.Rooms));
         CanvasHelpers.RenderToMap(MinimapCanvas, map, terminal);
