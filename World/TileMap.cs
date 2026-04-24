@@ -132,7 +132,7 @@ public class TileMap {
 
                 if (Tiles[w, h].Entity != null && !string.IsNullOrEmpty(Tiles[w, h].Text)) {
                     text = Tiles[w, h].Text;
-                    Canvas.Text(new Point(w, h), Tiles[w, h].Text, Canvas.Orientation.Horizontal, Style.Default);
+                    Canvas.Text(new Point(w, h), text[0].ToString(), Canvas.Orientation.Horizontal, Style.Default);
                     text = text[1..];
                 } else {
                     Canvas.Glyph(new Point(w, h), Tiles[w, h].Glyph, Style.Default);
