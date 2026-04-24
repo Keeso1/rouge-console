@@ -1,6 +1,7 @@
 using System.Drawing;
 using System.Text;
 using Sharpie;
+using Vimonia.Entities;
 using Vimonia.Enums;
 using Vimonia.World;
 
@@ -37,6 +38,20 @@ public static class CanvasHelpers {
         }
 
         return wordBound;
+    }
+
+    public static List<Point>? GetRemainingLetters(Point entityPos, Entity enemy, TileMap currentRoom) {
+        if (enemy == null) {
+            return null;
+        }
+
+        List<Point> remainderOfWord = [];
+        int x = entityPos.X;
+        while (x < currentRoom.Tiles.GetLength(0) && currentRoom.Tiles[x, entityPos.Y].Entity == enemy) {
+            remainderOfWord.Add(new Point(x, entityPos.Y));
+            x++;
+        }
+        return remainderOfWord;
     }
 
     public static Rune[,] RoomsToString(GameSettings settings, TileMap[,] Rooms, TileMap currentRoom, (int x, int y) maxDiff) //Helper func to see the grid in a clean way

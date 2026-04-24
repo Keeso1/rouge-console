@@ -24,6 +24,7 @@ public sealed class GameState(Player player, MapGen floor, GameSettings settings
             _currentRoom?.Deactivate();
             _currentRoom = value;
             _currentRoom?.Activate();
+            CombatHandler.Instance.Init(_currentRoom);
         }
     }
 
@@ -50,11 +51,7 @@ public sealed class GameState(Player player, MapGen floor, GameSettings settings
         CurrentRoom.RenderToCanvas();
         Canvas.Glyph(position, GameConstants.Player, player.Style); //Update player position
         PrevPosition = position;
-
-        if (CurrentRoom.Tiles[position.X, position.Y].Entity != null) {
-            player.TakeDamage(10);
-            Log.Info($"Health: {player.Health}");
-        }
+        PlayerInput?.Invoke(this, PrevPosition);
 
         if (player.Combo == "dw") {
             player.UseSkill("dw");
@@ -67,7 +64,6 @@ public sealed class GameState(Player player, MapGen floor, GameSettings settings
 
         Rune[,] map = CanvasHelpers.RoomsToString(settings, floor.Rooms, CurrentRoom, GetCanvasCoords.GetMaxDimensions(floor.Rooms));
         CanvasHelpers.RenderToMap(MinimapCanvas, map, terminal);
-        PlayerInput?.Invoke(this, PrevPosition);
         OnTick?.Invoke();
     }
 

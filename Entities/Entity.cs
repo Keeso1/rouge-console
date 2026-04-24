@@ -55,6 +55,10 @@ public abstract class Entity : IEntity {
 
         _playerPos = playerPos;
 
+        if (CanvasHelpers.GetWordBound(Position, Body).Contains(_playerPos)) { //Freeze when player touches
+            return;
+        }
+
         Point newPos = Controls.Move(s_directions[Rng.GetRandom().Next(s_directions.Length)], Position, _currentRoom, _playerPos, Body);
         PrevPosition = Position;
         Position = newPos;

@@ -34,7 +34,7 @@ public class TileMap {
             Tiles[coord.x, coord.y] = tile;
     }
 
-    protected void Set(List<Point> coords, Tile tile) {
+    public void Set(List<Point> coords, Tile tile) {
         for (int idx = 0; idx < coords.Count(); idx++) {
             Tiles[coords[idx].X, coords[idx].Y] = tile;
         }

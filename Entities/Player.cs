@@ -9,7 +9,7 @@ namespace Vimonia.Entities;
 
 public sealed class Player : IEntity {
 
-    public event Action<ISkill, Point> UsedSkill;
+    public static event Action<ISkill, Point> UsedSkill;
 
     public EntityType Type { get; set; }
     public int Health { get; private set; }
@@ -45,9 +45,14 @@ public sealed class Player : IEntity {
     }
 
     public void UseSkill(string combo) {
-        if (Skills.TryGetValue(combo, out var skill))
+        if (Skills.TryGetValue(combo, out var skill)) {
+
             UsedSkill?.Invoke(skill, Position);
-        Log.Info($"Used skill: {skill.Type}");
+            Log.Info($"Used skill: {skill.Type}");
+        }
+        Combo = "";
+        Log.Info($"Combo: {Combo}");
+
     }
 
     public void AddSkills(List<ISkill> skills) {
