@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using Vimonia.Entities;
+using Vimonia.Enums;
 using Vimonia.Interfaces;
 using Vimonia.World;
 
@@ -33,25 +34,23 @@ public class CombatHandler {
         }
 
         List<Point>? lengthToRemove = CanvasHelpers.GetRemainingLetters(playerPos, entity, CurrentRoom);
-        if (lengthToRemove == null) {
+        if (lengthToRemove == null || lengthToRemove.Count == 0) {
             return;
         }
 
-        int startIndex = entity.Body.Length - lengthToRemove.Count;
-        if (startIndex >= 0 && startIndex <= entity.Body.Length) {
-            if (startIndex == 0) {
-                entity.Health = 0;
-                entity.Dispose();
-                CurrentRoom.Set(lengthToRemove, Tile.Floor());
-                Log.Info($"enemy health: {entity.Health}");
-
-            }
+        int startIndex = playerPos.X - entity.Position.X;
+        if (startIndex >= 0 && startIndex < entity.Body.Length) {
             entity.Body = entity.Body.Remove(startIndex);
             CurrentRoom.Tiles[playerPos.X, playerPos.Y].Text = entity.Body;
             entity.Health = entity.Body.Length;
             CurrentRoom.Set(lengthToRemove, Tile.Floor());
             _player.Heal(lengthToRemove.Count * 10);
             Log.Info($"Entity health: {entity.Health}, Tile Text Prop: {CurrentRoom.Tiles[playerPos.X, playerPos.Y].Text}");
+
+            if (entity.Health <= 0) {
+                entity.Dispose();
+                Log.Info($"Enemy defeated: {entity.Type}");
+            }
         }
     }
 
