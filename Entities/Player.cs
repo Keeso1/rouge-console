@@ -51,8 +51,6 @@ public sealed class Player : IEntity {
             Log.Info($"Used skill: {skill.Type}");
         }
         Combo = "";
-        Log.Info($"Combo: {Combo}");
-
     }
 
     public void AddSkills(List<ISkill> skills) {

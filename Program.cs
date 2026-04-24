@@ -71,6 +71,7 @@ var game = new GameState(
 
 
 game.Update(null);
+// IAsciiFont figFont = await FigletFont.LoadAsync("Assets/fonts/small.flf");
 
 terminal.Repeat(
     t => {
