@@ -53,11 +53,6 @@ public sealed class GameState(Player player, MapGen floor, GameSettings settings
         PrevPosition = position;
         PlayerInput?.Invoke(this, PrevPosition);
 
-        if (CurrentRoom.Tiles[position.X, position.Y].Entity != null) {
-            player.TakeDamage(10);
-            Log.Info($"Health: {player.Health}");
-        }
-
         if (player.Combo == "dw") {
             player.UseSkill("dw");
             player.Combo = "";
