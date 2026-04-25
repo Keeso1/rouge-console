@@ -89,10 +89,9 @@ terminal.Repeat(
         })
         );
 
-        // Fill canvas logic here if needed, then:
-        headerCanvas.DrawOnto(t.Header, new Rectangle(Point.Empty, t.Header.Size), Point.Empty);
-        var currCombo = Player.Combo.Length > 0 ? Player.Combo : string.Empty;
+        var currCombo = Player.Combo.Length > 0 ? Player.Combo : "  ";
         headerCanvas.Text(new(0, 0), $"Combo: {currCombo}", Canvas.Orientation.Horizontal, Style.Default);
+        headerCanvas.DrawOnto(t.Header, new Rectangle(Point.Empty, t.Header.Size), Point.Empty);
         t.Header.Refresh();
 
         game.Canvas.DrawOnto(
