@@ -1,13 +1,7 @@
 using System.Drawing;
-using Vimonia.Core;
-using Vimonia.Enums;
 using Vimonia.Utils;
-using Vimonia.Entities;
 using Sharpie;
 using Sharpie.Backend;
-using Vimonia.Interfaces;
-using Sharpie.Abstractions;
-using Sharpie.Font;
 
 string logFilePath = "console_log.txt";
 Log.Init(logFilePath);
@@ -18,8 +12,6 @@ var terminal = new Terminal(
     CursesBackend.Load(),
     new TerminalOptions(UseColors: true, CaretMode: CaretMode.Invisible, UseMouse: false, ManagedWindows: true, AllocateHeader: true) { AllocateHeader = true }
 );
-
-
 
 var availableWidth = terminal.Screen.Size.Width - 2;
 var availableHeight = terminal.Screen.Size.Height - 2;
@@ -45,39 +37,11 @@ subWindow.Background = (new(' '),
 //
 
 CanvasWrapper.Init(window.Size);
+MinimapWrapper.Init(subWindow.Size);
+HeaderWrapper.Init(terminal.Header.Size);
 
-Canvas minimapCanvas = new(subWindow.Size);
+Game Game = new(terminal, settings, 4);
 
-Rng.Init(CanvasWrapper.Instance, 4);
-
-MapGen floor = new(CanvasWrapper.Instance, settings);
-
-Player Player = new(100, 100, new() {
-    Attributes = VideoAttribute.Bold,
-    ColorMixture = terminal.Colors.MixColors(StandardColor.Magenta, StandardColor.Black),
-});
-
-CombatHandler combatHandler = new(Player);
-Player.AddSkill(new DeleteSkill());
-
-Canvas headerCanvas = new(terminal.Header.Size);
-
-var game = new GameState(
-        headerCanvas,
-        Player,
-    floor,
-    settings,
-    terminal
-) {
-    Canvas = CanvasWrapper.Instance,
-    PrevPosition = new(CanvasWrapper.Instance.Size.Width / 2, CanvasWrapper.Instance.Size.Height / 2),
-    CurrentRoom = floor.Rooms[settings.NumberOfRooms + 1, settings.NumberOfRooms + 1],
-    MinimapCanvas = minimapCanvas
-};
-
-
-
-game.Update(null);
 // IAsciiFont figFont = await FigletFont.LoadAsync("Assets/fonts/small.flf");
 
 terminal.Repeat(
@@ -90,27 +54,25 @@ terminal.Repeat(
         })
         );
 
-        var currCombo = Player.Combo.Length > 0 ? Player.Combo : "  ";
-        var currHealth = Player.Health;
+        var currCombo = Game.Player.Combo.Length > 0 ? Game.Player.Combo : "  ";
+        var currHealth = Game.Player.Health;
 
-
-
-        headerCanvas.Text(new(20, 0), $"Health: {currHealth}/{Player.MaxHealth} ", Canvas.Orientation.Horizontal, Style.Default);
-        headerCanvas.Text(new(0, 0), $"Combo: {currCombo}", Canvas.Orientation.Horizontal, Style.Default);
-        headerCanvas.DrawOnto(t.Header, new Rectangle(Point.Empty, t.Header.Size), Point.Empty);
+        HeaderWrapper.Instance.Text(new(20, 0), $"Health: {currHealth}/{Game.Player.MaxHealth} ", Canvas.Orientation.Horizontal, Style.Default);
+        HeaderWrapper.Instance.Text(new(0, 0), $"Combo: {currCombo}", Canvas.Orientation.Horizontal, Style.Default);
+        HeaderWrapper.Instance.DrawOnto(t.Header, new Rectangle(Point.Empty, t.Header.Size), Point.Empty);
 
         t.Header.Refresh();
 
-        game.Canvas.DrawOnto(
+        CanvasWrapper.Instance.DrawOnto(
             window,
             new Rectangle(new Point(1, 1), CanvasWrapper.Instance.Size),
             new Point(0, 0)
         );
 
         // MINIMAP
-        game.MinimapCanvas.DrawOnto(
+        MinimapWrapper.Instance.DrawOnto(
             subWindow,
-            new Rectangle(new Point(0, 0), minimapCanvas.Size),
+            new Rectangle(new Point(0, 0), MinimapWrapper.Instance.Size),
             new Point(0, 0)
         );
 
@@ -123,44 +85,7 @@ terminal.Repeat(
 
 terminal.Run(
     (Term, Tevent) => {
-        switch (Tevent) {
-            case KeyEvent { Char.Value: 'q' }:
-                Log.Shutdown();
-                Environment.Exit(0);
-                break;
-            case KeyEvent { Char.Value: 'h' }:
-                game.Update(Direction.Left);
-                break;
-            case KeyEvent { Char.Value: 'j' }:
-                game.Update(Direction.Down);
-                break;
-            case KeyEvent { Char.Value: 'k' }:
-                game.Update(Direction.Up);
-                break;
-            case KeyEvent { Char.Value: 'l' }:
-                game.Update(Direction.Right);
-                break;
-            case KeyEvent { Char.Value: 'd' }:
-                Player.Combo += 'd';
-                if (Player.Combo.Length > 1) { // Don't shift enemies on first combo input
-                    game.Update(null);
-                }
-                break;
-            case KeyEvent { Char.Value: 'w' }:
-                Player.Combo += 'w';
-                if (Player.Combo.Length > 1) { // Don't shift enemies on first combo input
-                    game.Update(null);
-                }
-                break;
-            case KeyEvent { Char.Value: 'm' }:
-                subWindow.Visible = !subWindow.Visible; //Toggle window
-                if (subWindow.Visible) {
-                    window.SendToBack();
-                    subWindow.BringToFront();
-                }
-                break;
-        }
-        ;
+        Game.InputHandler(Tevent);
         return Task.FromResult(true);
     }
 );
